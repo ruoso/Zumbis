@@ -3,6 +3,11 @@
    xmlns:xs="http://www.w3.org/2001/XMLSchema"
    targetNamespace="http://perl.org.br/games/zumbis"
    elementFormDefault="qualified">
+  <xs:simpleType name="tileposition">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d+,\d+" />
+    </xs:restriction>
+  </xs:simpleType>
   <xs:element name="mapa">
     <xs:complexType>
       <xs:attribute name="tileset" type="xs:string">
@@ -34,6 +39,8 @@
             Define a altura do mapa (em número de tiles).
           </xs:documentation>
         </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="background" type="tileposition">
       </xs:attribute>
     </xs:complexType>
   </xs:element>
