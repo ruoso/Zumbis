@@ -9,6 +9,7 @@ use SDLx::Sprite;
 use SDLx::Sprite::Animated;
 use SDLx::Surface;
 use SDLx::Controller;
+use Collision::Util ':std';
 use Zumbis::Mapa;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
@@ -33,7 +34,7 @@ $heroi->set_sequences(
 my ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
 #$heroi->x( $heroi_x );
 #$heroi->y( $heroi_y );
-my $heroi_vel = 0.1;
+my $heroi_vel = 0.15;
 $heroi->sequence('parado_baixo');
 $heroi->start;
 
@@ -64,27 +65,24 @@ sub eventos {
 
 sub move_heroi {
     my $dt = shift;
-   
-    my $sequencia = $heroi->sequence; 
-    $heroi_x -= $heroi_vel * $dt if $sequencia eq 'esquerda';
-    $heroi_x += $heroi_vel * $dt if $sequencia eq 'direita';
-    $heroi_y -= $heroi_vel * $dt if $sequencia eq 'cima';
-    $heroi_y += $heroi_vel * $dt if $sequencia eq 'baixo';
+
+    my $sequencia = $heroi->sequence;
+    my ($change_x, $change_y);
+    $change_x = 0 - $heroi_vel * $dt if $sequencia eq 'esquerda';
+    $change_x = $heroi_vel * $dt if $sequencia eq 'direita';
+    $change_y = 0 - $heroi_vel * $dt if $sequencia eq 'cima';
+    $change_y = $heroi_vel * $dt if $sequencia eq 'baixo';
+
+    my $tilesize = $mapa->dados->{tilesize};
+    my $tilex = int(($heroi_x + $change_x + 15) / $tilesize);
+    my $tiley = int(($heroi_y + $change_y + 35) / $tilesize);
+
+    unless ($mapa->colisao->[$tilex][$tiley]) {
+        $heroi_x += $change_x;
+        $heroi_y += $change_y;
+    }
 }
 
-sub checa_limites {
-#    my $sequencia = $heroi->sequence;
-#    if (   ($sequencia eq 'cima'     and $y > 0 )
-#        or ($sequencia eq 'esquerda' and $x > 0 )
-#        or ($sequencia eq 'baixo'    and $fundo->{offset}->[1] )
-#        or ($sequencia eq 'direita'  and $fundo->{offset}->[0] )
-#    ) {
-#        $x = 0 if $x > 0;
-#        $y = 0 if $y > 0;
-#    }
-#TODO continuar
-}
-        
 
 sub exibicao {
     $mapa->render( $tela->surface );
