@@ -39,7 +39,7 @@ my $heroi_vel = 0.05;
 $heroi->sequence('parado_baixo');
 $heroi->start;
 
-my $tela = SDLx::Surface::get_display( 
+my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
     height => $mapa->height_px
 );
