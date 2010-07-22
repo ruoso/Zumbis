@@ -7,7 +7,7 @@ use constant MAP_NS => 'http://perl.org.br/games/zumbis';
 my $map_schema = XML::Compile::Schema->new('mapa.xsd');
 my $map_reader = $map_schema->compile(READER => pack_type(MAP_NS, 'mapa'),
                                       sloppy_integers => 1, sloppy_floats => 1);
-
+use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
 
