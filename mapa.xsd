@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema
    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   xmlns:z="http://perl.org.br/games/zumbis"
    targetNamespace="http://perl.org.br/games/zumbis"
    elementFormDefault="qualified">
   <xs:simpleType name="position">
@@ -13,14 +14,14 @@
       <xs:sequence>
         <xs:element name="object" minOccurs="0" maxOccurs="unbounded">
           <xs:complexType>
-            <xs:attribute name="position" type="position" use="required">
+            <xs:attribute name="position" type="z:position" use="required">
               <xs:annotation>
                 <xs:documentation xml:lang="pt-br">
                   Onde este objeto está no mapa.
                 </xs:documentation>
               </xs:annotation>
             </xs:attribute>
-            <xs:attribute name="tile" type="position" use="required">
+            <xs:attribute name="tile" type="z:position" use="required">
               <xs:annotation>
                 <xs:documentation xml:lang="pt-br">
                   Qual a posicao do tile no tileset.
@@ -38,7 +39,7 @@
         </xs:element>
         <xs:element name="zombie" maxOccurs="unbounded">
           <xs:complexType>
-            <xs:attribute name="posicao" type="position" use="required" />
+            <xs:attribute name="posicao" type="z:position" use="required" />
           </xs:complexType>
         </xs:element>
         <xs:annotation>
@@ -77,14 +78,14 @@
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="background" type="position" use="required">
+      <xs:attribute name="background" type="z:position" use="required">
         <xs:annotation>
           <xs:documentation xml:lang="pt-br">
             Define o tile de background.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
-      <xs:attribute name="playerstart" type="position" use="required">
+      <xs:attribute name="playerstart" type="z:position" use="required">
         <xs:annotation>
           <xs:documentation xml:lang="pt-br">
             Lugar onde o jogador começa.

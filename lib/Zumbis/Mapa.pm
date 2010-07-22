@@ -37,15 +37,15 @@ class Zumbis::Mapa {
 
     method playerstart_px {
         my $tilesize = $self->dados->{tilesize};
-        reutrn map { $_ * $tilesize } $self->playerstart;
+        return map { $_ * $tilesize } $self->playerstart;
     }
 
     method width_px {
-        return $self->dados->{width} * $self->dados->{tilesize}:
+        return $self->dados->{width} * $self->dados->{tilesize};
     }
 
     method height_px {
-        return $self->dados->{height} * $self->dados->{tilesize}:
+        return $self->dados->{height} * $self->dados->{tilesize};
     }
 
     method render($surface) {
@@ -66,9 +66,9 @@ class Zumbis::Mapa {
 
         # renderizar os objetos;
         for my $object (@{$self->dados->{object}}) {
-            my $src_rect = SDL::Rect->new((map {$_ * $tilesize } split /,/, $object->{tile})
+            my $src_rect = SDL::Rect->new((map { $_ * $tilesize } split /,/, $object->{tile}),
                                           $tilesize, $tilesize);
-            my $dst_rect = SDL::Rect->new((map {$_ * $tilesize } split /,/, $object->{position})
+            my $dst_rect = SDL::Rect->new((map { $_ * $tilesize } split /,/, $object->{position}),
                                           $tilesize, $tilesize);
             SDL::Video::blit_surface( $tileset, $src_rect,
                                       $surface, $dst_rect );
