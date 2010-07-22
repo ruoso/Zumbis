@@ -3,6 +3,9 @@ quatro direções para matar os zumbis:
 
 Brainstorm:
 
+ * O jogador anda nas quatro direções e pode atirar para onde ele está
+   apontando.
+
  * A princípio ter munição infinita, mas depois ter munição finita com
    cartuchos aparecendo ao longo do mapa.
 
@@ -13,3 +16,10 @@ Brainstorm:
 
  * Os zumbis aparecem aleatoriamente no mapa, através de um dos "spawn
    points"
+
+ * A princípio sem scroll.
+
+
+Tileset:
+
+ *  http://silveiraneto.net/tag/pixelart
