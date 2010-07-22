@@ -31,6 +31,23 @@ class Zumbis::Mapa {
         return $orig->BUILDARGS(%args);
     }
 
+    method playerstart {
+        return split(/,/, $self->dados->{playerstart});
+    }
+
+    method playerstart_px {
+        my $tilesize = $self->dados->{tilesize};
+        reutrn map { $_ * $tilesize } $self->playerstart;
+    }
+
+    method width_px {
+        return $self->dados->{width} * $self->dados->{tilesize}:
+    }
+
+    method height_px {
+        return $self->dados->{height} * $self->dados->{tilesize}:
+    }
+
     method render($surface) {
         my $tilesize = $self->dados->{tilesize};
         my $tileset  = $self->tileset;
