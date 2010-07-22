@@ -5,7 +5,8 @@ use XML::Compile::Schema;
 use XML::Compile::Util qw(pack_type);
 use constant MAP_NS => 'http://perl.org.br/games/zumbis';
 my $map_schema = XML::Compile::Schema->new('mapa.xsd');
-my $map_reader = $map_schema->compile(READER => pack_type MAP_NS, 'mapa');
+my $map_reader = $map_schema->compile(READER => pack_type(MAP_NS, 'mapa'),
+                                      sloppy_integers => 1, sloppy_floats => 1);
 
 use SDL::Image;
 use SDL::Video;
@@ -29,7 +30,7 @@ around 'BUILDARGS' => sub {
         $args{colisao}[$x][$y] = 1;
     }
 
-    $args{surface} = SDL::Image::load($args{dados}{tileset});
+    $args{tileset} = SDL::Image::load($args{dados}{tileset});
 
     return $orig->($self, %args);
 };
@@ -76,6 +77,9 @@ method render($surface) {
         SDL::Video::blit_surface( $tileset, $src_rect,
                                   $surface, $dst_rect );
     }
+
 };
+
+__PACKAGE__->meta->make_immutable();
 
 1;
