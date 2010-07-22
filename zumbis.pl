@@ -15,27 +15,25 @@ my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 
 my $heroi = SDLx::Sprite::Animated->new(
     image => 'dados/heroi.png',
-    rect  => SDL::Rect->new(5,14,29,40),
-    step_x => 8,
-    step_y => 9,
-    ticks_per_frame => 600,
+    rect  => SDL::Rect->new(5,14,32,45),
+    ticks_per_frame => 2,
 );
 
 $heroi->set_sequences(
-    parado_esquerda => [ [3, 1] ],
+    parado_esquerda => [ [1, 3] ],
     parado_direita  => [ [1, 1] ],
-    parado_cima     => [ [0, 1] ],
-    parado_baixo    => [ [2, 1] ],
-    esquerda        => [ [3,0], [3,1], [3,2] ],
-    direita         => [ [1,0], [1,1], [1,2] ],
-    cima            => [ [0,0], [0,1], [0,2] ],
-    baixo           => [ [2,0], [2,1], [2,2] ],
+    parado_cima     => [ [1, 0] ],
+    parado_baixo    => [ [1, 2] ],
+    esquerda        => [ [0,3], [1,3], [2,3] ],
+    direita         => [ [0,1], [1,1], [2,1] ],
+    cima            => [ [0,0], [1,0], [2,0] ],
+    baixo           => [ [0,2], [1,2], [2,2] ],
 );
 
 my ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
 #$heroi->x( $heroi_x );
 #$heroi->y( $heroi_y );
-my $heroi_vel = 0.05;
+my $heroi_vel = 0.1;
 $heroi->sequence('parado_baixo');
 $heroi->start;
 
