@@ -1,8 +1,14 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use SDL;
+use SDL::Rect;
+use SDL::Event;
+use SDL::Events;
 use SDLx::Sprite;
 use SDLx::Sprite::Animated;
+use SDLx::Surface;
+use SDLx::Controller;
 use Zumbis::Mapa;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
@@ -29,8 +35,8 @@ $heroi->set_sequences(
 my ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
 #$heroi->x( $heroi_x );
 #$heroi->y( $heroi_y );
-$heroi_vel = 0.05;
-$heroi->current_sequence('parado_baixo');
+my $heroi_vel = 0.05;
+$heroi->sequence('parado_baixo');
 $heroi->start;
 
 my $tela = SDLx::Surface::get_display( 
@@ -39,21 +45,21 @@ my $tela = SDLx::Surface::get_display(
 );
 
 sub eventos {
-    my $evt = shift;
-    return 0 if $evt->type == SDL_QUIT;
-    return 0 if $evt->key_sym == SDLK_ESCAPE;
+    my $e = shift;
+    return 0 if $e->type == SDL_QUIT;
+    return 0 if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
-        $heroi->current_sequence('esquerda')  if $e->key_sym == SDLK_LEFT;
-        $heroi->current_sequence('direita') if $e->key_sym == SDLK_RIGHT;
-        $heroi->current_sequence('baixo')  if $e->key_sym == SDLK_DOWN;
-        $heroi->current_sequence('cima')    if $e->key_sym == SDLK_UP;
+        $heroi->sequence('esquerda')  if $e->key_sym == SDLK_LEFT;
+        $heroi->sequence('direita') if $e->key_sym == SDLK_RIGHT;
+        $heroi->sequence('baixo')  if $e->key_sym == SDLK_DOWN;
+        $heroi->sequence('cima')    if $e->key_sym == SDLK_UP;
     }
     elsif ( $e->type == SDL_KEYUP ) {
-        $heroi->current_sequence('parado_esquerda')  if $e->key_sym == SDLK_LEFT;
-        $heroi->current_sequence('parado_direita') if $e->key_sym == SDLK_RIGHT;
-        $heroi->current_sequence('parado_baixo')  if $e->key_sym == SDLK_DOWN;
-        $heroi->current_sequence('parado_cima')    if $e->key_sym == SDLK_UP;
+        $heroi->sequence('parado_esquerda')  if $e->key_sym == SDLK_LEFT;
+        $heroi->sequence('parado_direita') if $e->key_sym == SDLK_RIGHT;
+        $heroi->sequence('parado_baixo')  if $e->key_sym == SDLK_DOWN;
+        $heroi->sequence('parado_cima')    if $e->key_sym == SDLK_UP;
     }
     return 1;
 }
@@ -61,7 +67,7 @@ sub eventos {
 sub move_heroi {
     my $dt = shift;
    
-    my $sequencia = $heroi->current_sequence; 
+    my $sequencia = $heroi->sequence; 
     $heroi_x -= $heroi_vel * $dt if $sequencia eq 'esquerda';
     $heroi_x += $heroi_vel * $dt if $sequencia eq 'direita';
     $heroi_y -= $heroi_vel * $dt if $sequencia eq 'cima';
@@ -69,15 +75,15 @@ sub move_heroi {
 }
 
 sub checa_limites {
-    my $sequencia = $heroi->current_sequence;
-    if (   ($sequencia eq 'cima'     and $y > 0 )
-        or ($sequencia eq 'esquerda' and $x > 0 )
+#    my $sequencia = $heroi->sequence;
+#    if (   ($sequencia eq 'cima'     and $y > 0 )
+#        or ($sequencia eq 'esquerda' and $x > 0 )
 #        or ($sequencia eq 'baixo'    and $fundo->{offset}->[1] )
 #        or ($sequencia eq 'direita'  and $fundo->{offset}->[0] )
-    ) {
-        $x = 0 if $x > 0;
-        $y = 0 if $y > 0;
-    }
+#    ) {
+#        $x = 0 if $x > 0;
+#        $y = 0 if $y > 0;
+#    }
 #TODO continuar
 }
         
