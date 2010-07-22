@@ -31,7 +31,7 @@ around 'BUILDARGS' => sub {
 
     $args{surface} = SDL::Image::load($args{dados}{tileset});
 
-    return $orig->BUILDARGS(%args);
+    return $orig->($self, %args);
 };
 
 method playerstart {
