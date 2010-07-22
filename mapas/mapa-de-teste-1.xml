@@ -93,6 +93,17 @@
   <object position="22,17" tile="10,32" collide="true" />
   <object position="23,17" tile="10,32" collide="true" />
 
+  <!-- arvore -->
+  <object position="15,12" tile="0,15" collide="true" />
+  <object position="15,13" tile="0,16" collide="true" />
+  <object position="15,14" tile="0,17" collide="true" />
+  <object position="16,12" tile="1,15" collide="true" />
+  <object position="16,13" tile="1,16" collide="true" />
+  <object position="16,14" tile="1,17" collide="true" />
+  <object position="17,12" tile="2,15" collide="true" />
+  <object position="17,13" tile="2,16" collide="true" />
+  <object position="17,14" tile="2,17" collide="true" />
+
   <!-- canto superior esquerdo -->
   <object position="0,0" tile="9,30" collide="true" />
   <!-- canto inferior esquerdo -->
