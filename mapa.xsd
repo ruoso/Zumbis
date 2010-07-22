@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   targetNamespace="http://perl.org.br/games/zumbis"
+   elementFormDefault="qualified">
+  <xs:element name="mapa">
+    <xs:complexType>
+      <xs:attribute name="tileset" type="xs:string">
+        <xs:annotation>
+          <xs:documentation xml:lang="pt-br">
+            Este atributo define o arquivo de imagem que contém o
+            tileset a ser usado (em pixels).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="tilesize" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation xml:lang="pt-br">
+            Os tiles são necessariamente quadrados, esse atributo
+            define a largura e altura do tile (em pixels).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="width" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation xml:lang="pt-br">
+            Define a largura do mapa (em número de tiles).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="width" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation xml:lang="pt-br">
+            Define a altura do mapa (em número de tiles).
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
