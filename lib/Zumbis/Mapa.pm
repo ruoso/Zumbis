@@ -28,7 +28,7 @@ class Zumbis::Mapa {
 
         $args{surface} = SDL::Image::load($args{dados}{tileset});
 
-        return $orig->BIULDARGS(%args);
+        return $orig->BUILDARGS(%args);
     }
 
     method render($surface) {
