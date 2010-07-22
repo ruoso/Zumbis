@@ -1,0 +1,108 @@
+<mapa
+   xmlns="http://perl.org.br/games/zumbis"
+   tileset="mapas/free_tileset_version_10.png"
+   tilesize="32"
+   width="25"
+   height="18"
+   background="5,17"
+   playerstart="10,10">
+
+  <!-- canto superior esquerdo -->
+  <object position="0,0" tile="9,30" collide="true" />
+  <!-- canto inferior esquerdo -->
+  <object position="17,0" tile="11,30" collide="true" />
+  <!-- canto superior direito -->
+  <object position="0,24" tile="9,32" collide="true" />
+  <!-- canto inferior direito -->
+  <object position="17,24" tile="11,32" collide="true" />
+
+  <!-- lateral esquerda -->
+  <object position="1,0" tile="9,31" collide="true" />
+  <object position="2,0" tile="9,31" collide="true" />
+  <object position="3,0" tile="9,31" collide="true" />
+  <object position="4,0" tile="9,31" collide="true" />
+  <object position="5,0" tile="9,31" collide="true" />
+  <object position="6,0" tile="9,31" collide="true" />
+  <object position="7,0" tile="9,31" collide="true" />
+  <object position="8,0" tile="9,31" collide="true" />
+  <object position="9,0" tile="9,31" collide="true" />
+  <object position="10,0" tile="9,31" collide="true" />
+  <object position="11,0" tile="9,31" collide="true" />
+  <object position="12,0" tile="9,31" collide="true" />
+  <object position="13,0" tile="9,31" collide="true" />
+  <object position="14,0" tile="9,31" collide="true" />
+  <object position="15,0" tile="9,31" collide="true" />
+  <object position="16,0" tile="9,31" collide="true" />
+
+  <!-- lateral direita -->
+  <object position="24,1" tile="11,31" collide="true" />
+  <object position="24,2" tile="11,31" collide="true" />
+  <object position="24,3" tile="11,31" collide="true" />
+  <object position="24,4" tile="11,31" collide="true" />
+  <object position="24,5" tile="11,31" collide="true" />
+  <object position="24,6" tile="11,31" collide="true" />
+  <object position="24,7" tile="11,31" collide="true" />
+  <object position="24,8" tile="11,31" collide="true" />
+  <object position="24,9" tile="11,31" collide="true" />
+  <object position="24,10" tile="11,31" collide="true" />
+  <object position="24,11" tile="11,31" collide="true" />
+  <object position="24,12" tile="11,31" collide="true" />
+  <object position="24,13" tile="11,31" collide="true" />
+  <object position="24,14" tile="11,31" collide="true" />
+  <object position="24,15" tile="11,31" collide="true" />
+  <object position="24,16" tile="11,31" collide="true" />
+
+  <!-- superior -->
+  <object position="0,1" tile="10,30" collide="true" />
+  <object position="0,2" tile="10,30" collide="true" />
+  <object position="0,3" tile="10,30" collide="true" />
+  <object position="0,4" tile="10,30" collide="true" />
+  <object position="0,5" tile="10,30" collide="true" />
+  <object position="0,6" tile="10,30" collide="true" />
+  <object position="0,7" tile="10,30" collide="true" />
+  <object position="0,8" tile="10,30" collide="true" />
+  <object position="0,8" tile="10,30" collide="true" />
+  <object position="0,10" tile="10,30" collide="true" />
+  <object position="0,11" tile="10,30" collide="true" />
+  <object position="0,12" tile="10,30" collide="true" />
+  <object position="0,13" tile="10,30" collide="true" />
+  <object position="0,14" tile="10,30" collide="true" />
+  <object position="0,15" tile="10,30" collide="true" />
+  <object position="0,16" tile="10,30" collide="true" />
+  <object position="0,17" tile="10,30" collide="true" />
+  <object position="0,18" tile="10,30" collide="true" />
+  <object position="0,19" tile="10,30" collide="true" />
+  <object position="0,20" tile="10,30" collide="true" />
+  <object position="0,22" tile="10,30" collide="true" />
+  <object position="0,23" tile="10,30" collide="true" />
+
+  <!-- inferior -->
+  <object position="17,1" tile="10,32" collide="true" />
+  <object position="17,2" tile="10,32" collide="true" />
+  <object position="17,3" tile="10,32" collide="true" />
+  <object position="17,4" tile="10,32" collide="true" />
+  <object position="17,5" tile="10,32" collide="true" />
+  <object position="17,6" tile="10,32" collide="true" />
+  <object position="17,7" tile="10,32" collide="true" />
+  <object position="17,8" tile="10,32" collide="true" />
+  <object position="17,8" tile="10,32" collide="true" />
+  <object position="17,10" tile="10,32" collide="true" />
+  <object position="17,11" tile="10,32" collide="true" />
+  <object position="17,12" tile="10,32" collide="true" />
+  <object position="17,13" tile="10,32" collide="true" />
+  <object position="17,14" tile="10,32" collide="true" />
+  <object position="17,15" tile="10,32" collide="true" />
+  <object position="17,16" tile="10,32" collide="true" />
+  <object position="17,17" tile="10,32" collide="true" />
+  <object position="17,18" tile="10,32" collide="true" />
+  <object position="17,19" tile="10,32" collide="true" />
+  <object position="17,20" tile="10,32" collide="true" />
+  <object position="17,22" tile="10,32" collide="true" />
+  <object position="17,23" tile="10,32" collide="true" />
+
+  <zombie position="1,1" />
+  <zombie position="16,24" />
+  <zombie position="1,24" />
+  <zombie position="16,1" />
+
+</mapa>
