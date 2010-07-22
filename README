@@ -1,0 +1,15 @@
+A idéia do jogo é ter um mapa, onde o jogador pode atirar para as
+quatro direções para matar os zumbis:
+
+Brainstorm:
+
+ * A princípio ter munição infinita, mas depois ter munição finita com
+   cartuchos aparecendo ao longo do mapa.
+
+ * Ter obstáculos no meio do mapa.
+
+ * A princípio ser "time trial", depois ter o tempo de cada fase. O
+   jogo acaba quando o jogador morre (tocado por um zumbi).
+
+ * Os zumbis aparecem aleatoriamente no mapa, através de um dos "spawn
+   points"
