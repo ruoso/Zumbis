@@ -19,6 +19,15 @@ Brainstorm:
 
  * A princípio sem scroll.
 
+ * Ter prioridade nos spawn points.
+
+ * O zumbi vai ficando mais rápido com o tempo.
+
+ * A velocidade com que os zumbis aparecem aumenta com o tempo.
+
+ * O mapa diz o estado inicial do player;
+
+ * O mapa diz, por spawn point, o estado inicial do zumbi;
 
 Tileset:
 
