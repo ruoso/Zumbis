@@ -1,5 +1,5 @@
 package Zumbis::Zumbi;
-use Moose;
+use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
@@ -55,7 +55,7 @@ sub BUILDARGS {
 
 sub _muda_direcao {
     my $self = shift;
-    my @direcoes = qw(cima baixo esquerda direita);
+    my @direcoes = @_ || qw(cima baixo esquerda direita);
     $self->sprite->sequence($direcoes[int rand @direcoes ]);
 }
 
@@ -67,7 +67,42 @@ sub tick {
     $self->dt( $self->dt + $dt );
     if ($self->dt > $self->change_dt) {
         $self->dt(0);
-        $self->_muda_direcao();
+        # zumbis sao 1/3 idiotas ;)
+#        if (1 < rand 3) {
+#            $self->_muda_direcao();
+#        }
+#        else {
+        my ($h_tx, $h_ty, $z_tx, $z_ty) = map { int($_ / $tilesize) }
+          $heroi_x, $heroi_y, $self->x, $self->y;
+
+#        if (!$self->tx ||
+#            !$self->ty ||
+#            $z_tx != $self->tx ||
+#            $z_ty != $self->ty) {
+
+            # acabou de mudar de quadrado... então pode decidir a direção
+            $self->tx($z_tx);
+            $self->ty($z_ty);
+
+            # decidir a próxima direção... precisamos fazer uma cópia do
+            # mapa de colisão para fazer o algoritmo de shortest-path do
+            # Dijkstra.
+            my @opcoes = ();
+            if ($h_tx > $z_tx) {
+                push @opcoes, 'direita';
+            }
+            elsif ($h_tx < $z_tx) {
+                push @opcoes, 'esquerda';
+            }
+            if ($h_ty > $z_ty) {
+                push @opcoes, 'baixo';
+            }
+            elsif ($h_ty < $z_ty) {
+                push @opcoes, 'cima';
+            }
+            $self->_muda_direcao(@opcoes);
+        }
+
     }
 
     # move o zumbi
@@ -90,24 +125,6 @@ sub tick {
         $self->y( $self->y + $change_y);
     }
 
-#    my ($h_t_x, $h_t_y, $z_t_x, $z_t_y) = map { int($_ / $tilesize) }
-#      $heroi_x, $heroi_y, $self->x, $self->y;
-#
-#    if (!$self->tx ||
-#        !$self->ty ||
-#        $z_t_x != $self->tx ||
-#        $z_t_y != $self->ty) {
-#
-#        # acabou de mudar de quadrado... então pode decidir a direção
-#        $self->tx($z_t_x);
-#        $self->ty($z_t_y);
-#
-#        # decidir a próxima direção... precisamos fazer uma cópia do
-#        # mapa de colisão para fazer o algoritmo de shortest-path do
-#        # Dijkstra.
-#        
-#        
-#    }
 }
 
 sub rect {

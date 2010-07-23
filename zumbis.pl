@@ -133,7 +133,7 @@ sub move_heroi {
 
 }
 
-sub move_zumbis { $_->tick($_[0], $mapa, 0,0) for @zumbis }
+sub move_zumbis { $_->tick($_[0], $mapa, $heroi_x, $heroi_y) for @zumbis }
 
 sub exibicao {
     $mapa->render( $tela->surface );
