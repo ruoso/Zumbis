@@ -50,7 +50,7 @@ my $tela = SDLx::Surface::display(
     height => $mapa->height_px
 );
 
-my $pressed = 0;
+my %pressed;
 sub eventos {
     my $e = shift;
     return 0 if $e->type == SDL_QUIT;
@@ -59,22 +59,18 @@ sub eventos {
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
         if ($tecla == SDLK_LEFT) {
-            $pressed++;
-            $heroi->sequence('esquerda');
+            $pressed{esquerda} = 1;
         }
         elsif ($tecla == SDLK_RIGHT) {
-            $pressed++;
-            $heroi->sequence('direita');
+            $pressed{direita} = 1;
         }
         elsif ($tecla == SDLK_DOWN) {
-            $pressed++;
-            $heroi->sequence('baixo');
+            $pressed{baixo} = 1;
         }
         elsif($tecla == SDLK_UP) {
-            $pressed++;
-            $heroi->sequence('cima');
+            $pressed{cima} = 1;
         }
-        elsif ($tecla == SDLK_SPACE && scalar @tiros < 2) {
+        elsif ($tecla == SDLK_SPACE && scalar @tiros < 4) {
             my $type;
             given ($heroi->sequence) {
                 when (/esquerda/) { $type = 'rtl' };
@@ -85,20 +81,30 @@ sub eventos {
             push @tiros, Zumbis::Tiro->new(x => $heroi_x, y => $heroi_y+20,
                                            type => $type);
         }
+        if (%pressed) {
+            $heroi->sequence((keys %pressed)[0]);
+        }
     }
     elsif ( $e->type == SDL_KEYUP ) {
         my $tecla = $e->key_sym;
         if ($tecla == SDLK_LEFT) {
-            $heroi->sequence('parado_esquerda') unless --$pressed;
+            delete $pressed{esquerda};
+            $heroi->sequence('parado_esquerda')  unless %pressed;
         }
         elsif ($tecla == SDLK_RIGHT) {
-            $heroi->sequence('parado_direita') unless --$pressed;
+            delete $pressed{direita};
+            $heroi->sequence('parado_direita')  unless %pressed;;
         }
         elsif ($tecla == SDLK_DOWN) {
-            $heroi->sequence('parado_baixo')  unless --$pressed;
+            delete $pressed{baixo};
+            $heroi->sequence('parado_baixo')  unless %pressed;
         }
         elsif ($tecla == SDLK_UP) {
-            $heroi->sequence('parado_cima') unless --$pressed;
+            delete $pressed{cima};
+            $heroi->sequence('parado_cima') unless %pressed;
+        }
+        if (%pressed) {
+            $heroi->sequence((keys %pressed)[0]);
         }
     }
     return 1;

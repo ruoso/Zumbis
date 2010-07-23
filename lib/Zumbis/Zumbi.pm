@@ -3,7 +3,6 @@ use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
-use Clone 'clone';
 
 use constant SPRITE_IMAGE => 'dados/zumbi.png';
 use constant SPRITE_NUM_COLS => 3;
