@@ -4,6 +4,7 @@ use MooseX::Method::Signatures;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
+use Clone 'clone';
 
 use constant SPRITE_IMAGE => 'dados/zumbi.png';
 use constant SPRITE_NUM_COLS => 3;
@@ -16,6 +17,9 @@ has x => (is => 'rw', isa => 'Int', required => 1);
 has y => (is => 'rw', isa => 'Int', required => 1);
 has sprite => (is => 'ro', isa => 'SDLx::Sprite::Animated',
                handles => ['sequence']);
+has tx => (is => 'rw', isa => 'Int');
+has ty => (is => 'rw', isa => 'Int');
+has vel => (is => 'rw', default => 0.1);
 
 
 around 'BUILDARGS' => sub {
@@ -48,7 +52,26 @@ around 'BUILDARGS' => sub {
 };
 
 method tick($dt, $mapa, $heroi_x, $heroi_y) {
-    # TODO
+    my $tilesize = $mapa->tilesize;
+
+    my ($h_t_x, $h_t_y, $z_t_x, $z_t_y) = map { int($_ / $tilesize) }
+      $heroi_x, $heroi_y, $self->x, $self->y;
+
+    if (!$self->tx ||
+        !$self->ty ||
+        $z_t_x != $self->tx ||
+        $z_t_y != $self->ty) {
+
+        # acabou de mudar de quadrado... então pode decidir a direção
+        $self->tx($z_t_x);
+        $self->ty($z_t_y);
+
+        # decidir a próxima direção... precisamos fazer uma cópia do
+        # mapa de colisão para fazer o algoritmo de shortest-path do
+        # Dijkstra.
+        
+        
+    }
 }
 
 method rect {

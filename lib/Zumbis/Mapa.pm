@@ -44,6 +44,14 @@ method playerstart_px {
     return map { $_ * $tilesize } $self->playerstart;
 };
 
+method width {
+    return $self->dados->{width};
+};
+
+method height {
+    return $self->dados->{height};
+};
+
 method width_px {
     return $self->dados->{width} * $self->dados->{tilesize};
 };
@@ -51,6 +59,10 @@ method width_px {
 method height_px {
     return $self->dados->{height} * $self->dados->{tilesize};
 };
+
+method tilesize {
+    return $self->dados->{tilesize};
+}
 
 method render($surface) {
     my $tilesize = $self->dados->{tilesize};
