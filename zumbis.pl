@@ -93,8 +93,7 @@ sub move_heroi {
         exit;
     }
 
-    $_->tick($dt, $mapa) for @tiros;
-    @tiros = grep { !$_->collided } @tiros;
+    @tiros = grep { $_->tick($dt, $mapa) } @tiros;
 
     $last_zumbi_dt += $dt;
     if ($last_zumbi_dt > 500) {
