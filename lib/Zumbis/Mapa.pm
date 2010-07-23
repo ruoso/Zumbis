@@ -80,6 +80,13 @@ method render($surface) {
 
 };
 
+method next_spawnpoint_px {
+    my $tilesize = $self->dados->{tilesize};
+    my $sp_count = scalar @{$self->dados->{zombie}};
+    my $sp_num = int(rand($sp_count - 1)+0.5);
+    return map { $_ * $tilesize } split /,/, $self->dados->{zombie}[$sp_num]{posicao};
+}
+
 __PACKAGE__->meta->make_immutable();
 
 1;

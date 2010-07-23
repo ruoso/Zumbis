@@ -9,8 +9,8 @@ use SDLx::Sprite;
 use SDLx::Sprite::Animated;
 use SDLx::Surface;
 use SDLx::Controller;
-use Collision::Util ':std';
 use Zumbis::Mapa;
+use Zumbis::Zumbi;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 
@@ -19,6 +19,9 @@ my $heroi = SDLx::Sprite::Animated->new(
     rect  => SDL::Rect->new(5,14,32,45),
     ticks_per_frame => 2,
 );
+
+my @zumbis;
+my @tiros;
 
 $heroi->set_sequences(
     parado_esquerda => [ [1, 3] ],
@@ -66,9 +69,14 @@ sub eventos {
 my $last_zumbi_dt = 0;
 sub move_heroi {
     my $dt = shift;
+    my $tilesize = $mapa->dados->{tilesize};
 
     $last_zumbi_dt += $dt;
     if ($last_zumbi_dt > 500) {
+
+        my ($x, $y) = $mapa->next_spawnpoint_px;
+        push @zumbis, Zumbis::Zumbi->new(x => $x, y => $y);
+
         $last_zumbi_dt = 0;
     }
 
@@ -80,7 +88,6 @@ sub move_heroi {
     $change_y = 0 - $heroi_vel * $dt if $sequencia eq 'cima';
     $change_y = $heroi_vel * $dt if $sequencia eq 'baixo';
 
-    my $tilesize = $mapa->dados->{tilesize};
     my $tilex = int(($heroi_x + $change_x + 15) / $tilesize);
     my $tiley = int(($heroi_y + $change_y + 35) / $tilesize);
 
@@ -94,6 +101,8 @@ sub move_heroi {
 
 sub exibicao {
     $mapa->render( $tela->surface );
+    $_->render($tela->surface) for @tiros;
+    $_->render($tela->surface) for @zumbis;
     $heroi->draw_xy( $tela->surface, $heroi_x, $heroi_y );
     $tela->update;
 }
