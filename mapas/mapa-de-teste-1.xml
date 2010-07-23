@@ -114,8 +114,8 @@
   <object position="17,14" tile="2,17" collide="true" />
 
   <zombie posicao="1,1" />
-  <zombie posicao="16,24" />
-  <zombie posicao="1,24" />
-  <zombie posicao="16,1" />
+  <zombie posicao="22,15" />
+  <zombie posicao="22,1" />
+  <zombie posicao="1,15" />
 
 </mapa>

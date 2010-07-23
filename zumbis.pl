@@ -9,6 +9,7 @@ use SDLx::Sprite;
 use SDLx::Sprite::Animated;
 use SDLx::Surface;
 use SDLx::Controller;
+use Collision::2D ':all';
 use Zumbis::Mapa;
 use Zumbis::Zumbi;
 
@@ -71,12 +72,18 @@ sub move_heroi {
     my $dt = shift;
     my $tilesize = $mapa->dados->{tilesize};
 
+    for my $z (@zumbis) {
+        next if abs($heroi_x - $z->x) > 25;
+        next if abs($heroi_y - $z->y) > 25;
+        print "MORREU!\n";
+        exit;
+    }
+
+
     $last_zumbi_dt += $dt;
     if ($last_zumbi_dt > 500) {
-
         my ($x, $y) = $mapa->next_spawnpoint_px;
         push @zumbis, Zumbis::Zumbi->new(x => $x, y => $y);
-
         $last_zumbi_dt = 0;
     }
 
@@ -95,6 +102,7 @@ sub move_heroi {
         $heroi_x += $change_x;
         $heroi_y += $change_y;
     }
+
 
 }
 
