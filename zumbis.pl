@@ -104,8 +104,7 @@ sub move_heroi {
         exit;
     }
 
-    $_->tick($dt, $mapa) for @tiros;
-    @tiros = grep { !$_->collided } @tiros;
+    @tiros = grep { $_->tick($dt, $mapa) } @tiros;
 
     my $sequencia = $heroi->sequence;
     my ($change_x, $change_y) = (0,0);

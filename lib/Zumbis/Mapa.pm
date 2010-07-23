@@ -1,6 +1,5 @@
 package Zumbis::Mapa;
 use Moose;
-use MooseX::Method::Signatures;
 use XML::Compile::Schema;
 use XML::Compile::Util qw(pack_type);
 use constant MAP_NS => 'http://perl.org.br/games/zumbis';
@@ -16,8 +15,8 @@ has dados => (is => 'ro', isa => 'HashRef' );
 has colisao => (is => 'ro', isa => 'ArrayRef');
 has tileset => (is => 'ro');
 
-around 'BUILDARGS' => sub {
-    my ($orig, $self, %args) = @_;
+sub BUILDARGS {
+    my ($self, %args) = @_;
 
     $args{dados} = $map_reader->($args{arquivo});
 
@@ -32,39 +31,47 @@ around 'BUILDARGS' => sub {
 
     $args{tileset} = SDL::Image::load($args{dados}{tileset});
 
-    return $orig->($self, %args);
+    return \%args;
 };
 
-method playerstart {
+sub playerstart {
+    my ($self) = @_;
     return split(/,/, $self->dados->{playerstart});
 };
 
-method playerstart_px {
+sub playerstart_px {
+    my ($self) = @_;
     my $tilesize = $self->dados->{tilesize};
     return map { $_ * $tilesize } $self->playerstart;
 };
 
-method width {
+sub width {
+    my ($self) = @_;
     return $self->dados->{width};
 };
 
-method height {
+sub height {
+    my ($self) = @_;
     return $self->dados->{height};
 };
 
-method width_px {
+sub width_px {
+    my ($self) = @_;
     return $self->dados->{width} * $self->dados->{tilesize};
 };
 
-method height_px {
+sub height_px {
+    my ($self) = @_;
     return $self->dados->{height} * $self->dados->{tilesize};
 };
 
-method tilesize {
+sub tilesize {
+    my ($self) = @_;
     return $self->dados->{tilesize};
 }
 
-method render($surface) {
+sub render {
+    my ($self, $surface) = @_;
     my $tilesize = $self->dados->{tilesize};
     my $tileset  = $self->tileset;
 
@@ -92,7 +99,8 @@ method render($surface) {
 
 };
 
-method next_spawnpoint_px {
+sub next_spawnpoint_px {
+    my ($self) = @_;
     my $tilesize = $self->dados->{tilesize};
     my $sp_count = scalar @{$self->dados->{zombie}};
     my $sp_num = int(rand($sp_count - 1)+0.5);

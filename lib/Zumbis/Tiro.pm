@@ -1,15 +1,14 @@
 package Zumbis::Tiro;
 use 5.10.0;
 use Moose;
-use MooseX::Method::Signatures;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
 
-has x => (is => 'rw', isa => 'Int', required => 1);
-has y => (is => 'rw', isa => 'Int', required => 1);
-has vel => (is => 'rw', required => 1, default => 3);
-has type => (is => 'rw', required => 1);
+has x => (is => 'rw');
+has y => (is => 'rw');
+has vel => (is => 'rw', default => 0.4);
+has type => (is => 'rw');
 has collided => (is => 'rw', default => 0);
 
 my $sprites = SDL::Image::load('dados/bullet.png');
@@ -20,22 +19,28 @@ my %rects =
     tpd => SDL::Rect->new(10, 20, 10, 20),
   );
 
-method tick($dt, $mapa) {
-    my $tilesize = $mapa->tilesize;
+my $cache_colisao;
+my $cache_dados;
+my $cache_identity;
 
-    my ($o_t_x, $o_t_y) = map { int($_ / $tilesize) }
-      $self->x, $self->y;
+sub tick {
+    my ($self, $dt, $mapa) = @_;
+    if ($cache_identity != $mapa) {
+        $cache_colisao = $mapa->colisao;
+        $cache_dados = $mapa->dados;
+        $cache_identity = $mapa;
+    }
+    my $tilesize = $cache_dados->{tilesize};
+
+    my ($x, $y) = ($self->x, $self->y);
+    my ($o_t_x, $o_t_y) = map { int($_ / $tilesize) } $x, $y;
 
     my ($change_x, $change_y) = (0,0);
-    given ($self->type) {
-        when (/rtl/) { $change_x = 0 - $self->vel * $dt };
-        when (/ltr/) { $change_x =     $self->vel * $dt };
-        when (/btu/) { $change_y = 0 - $self->vel * $dt };
-        when (/tpd/) { $change_y =     $self->vel * $dt };
-    };
-
-    $self->x(int($self->x + $change_x));
-    $self->y(int($self->y + $change_y));
+    my $type = $self->type; my $vel = $self->vel;
+    if    ($type eq 'rtl') { $change_x = 0 - $vel * $dt }
+    elsif ($type eq 'ltr') { $change_x =     $vel * $dt }
+    elsif ($type eq 'btu') { $change_y = 0 - $vel * $dt }
+    elsif ($type eq 'tpd') { $change_y =     $vel * $dt }
 
     my ($tiles_x, $tiles_y) = map { int($_ / $tilesize) }
       ($change_x, $change_y);
@@ -43,38 +48,54 @@ method tick($dt, $mapa) {
     my ($step_x, $step_y) = map { $_ > 0 ? 1 : -1 }
       ($tiles_x, $tiles_y);
 
+    my $mwidth = $cache_dados->{width};
+    my $mheight = $cache_dados->{height};
+
     my ($n_t_x, $n_t_y) = ($o_t_x, $o_t_y);
     while ($tiles_x &&
            $n_t_x >= 0 &&
-           $n_t_x < $mapa->width) {
-        if ($mapa->colisao->[$n_t_x][$n_t_y]) {
-            $self->collided(1);
-            return;
+           $n_t_x < $mwidth) {
+        if ($cache_colisao->[$n_t_x][$n_t_y]) {
+            return 0;
         }
         $tiles_x -= $step_x;
         $n_t_x += $step_x;
     }
     while ($tiles_y &&
            $n_t_y >= 0 &&
-           $n_t_y < $mapa->height) {
-        if ($mapa->colisao->[$n_t_x][$n_t_y]) {
-            $self->collided(1);
-            return;
+           $n_t_y < $mheight) {
+        if ($cache_colisao->[$n_t_x][$n_t_y]) {
+            return 0;
         }
         $tiles_y -= $step_y;
         $n_t_y += $step_y;
     }
+    if ($n_t_x <= 0 ||
+        $n_t_x >= $mwidth ||
+        $n_t_y <= 0 ||
+        $n_t_y >= $mheight) {
+        return 0;
+    }
+
+    $self->{x} = ($x + $change_x);
+    $self->{y} = ($y + $change_y);
+
+    return 1;
 }
 
 
-method rect {
+sub rect {
+    my ($self) = @_;
     return SDL::Rect->new($self->x, $self->y,
                           $rects{$self->type}->w,$rects{$self->type}->h);
 }
 
-method render($surface) {
+sub render {
+    my ($self,$surface) = @_;
     SDL::Video::blit_surface( $sprites, $rects{$self->type},
                               $surface, $self->rect );
 }
+
+__PACKAGE__->meta->make_immutable();
 
 1;
