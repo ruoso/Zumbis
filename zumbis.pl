@@ -63,8 +63,16 @@ sub eventos {
     return 1;
 }
 
+my $last_zumbi_dt;
+
 sub move_heroi {
     my $dt = shift;
+
+    print $dt;
+    if ($dt - $last_zumbi_dt > 5) {
+        print "aparecer zumbi";
+    }
+
 
     my $sequencia = $heroi->sequence;
     my ($change_x, $change_y);
@@ -81,6 +89,7 @@ sub move_heroi {
         $heroi_x += $change_x;
         $heroi_y += $change_y;
     }
+
 }
 
 
