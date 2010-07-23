@@ -40,7 +40,7 @@ $heroi->set_sequences(
 my ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
 #$heroi->x( $heroi_x );
 #$heroi->y( $heroi_y );
-my $heroi_vel = 0.15;
+my $heroi_vel = 0.25;
 $heroi->sequence('parado_baixo');
 $heroi->start;
 
@@ -98,7 +98,8 @@ sub move_heroi {
     @zumbis = grep { my $z = $_;
                      !grep {
                          my $t = $_;
-                         (abs($t->{x} - $z->{x})<32 &&
+                         (!$t->collided &&
+                          abs($t->{x} - $z->{x})<32 &&
                           abs($t->{y} - $z->{y})<32)?$t->collided(1):0;
                      } @tiros
                  } @zumbis;

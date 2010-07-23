@@ -7,7 +7,7 @@ use SDL::Video;
 
 has x => (is => 'rw');
 has y => (is => 'rw');
-has vel => (is => 'rw', default => 0.4);
+has vel => (is => 'rw', default => 0.6);
 has type => (is => 'rw');
 has collided => (is => 'rw', default => 0);
 
