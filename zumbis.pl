@@ -24,6 +24,7 @@ my $heroi = SDLx::Sprite::Animated->new(
 );
 
 my @zumbis;
+my @morrendo;
 my @tiros;
 
 $heroi->set_sequences(
@@ -135,7 +136,7 @@ sub move_heroi {
                          my $t = $_;
                          (!$t->collided &&
                           abs($t->{x} - $z->{x})<32 &&
-                          abs($t->{y} - $z->{y})<32)?$t->collided(1):0;
+                          abs($t->{y} - $z->{y})<32)?($z->sequence('morrendo_'.$z->sequence),push(@morrendo,$z),$t->collided(1)):0;
                      } @tiros
                  } @zumbis;
 

@@ -61,7 +61,7 @@ sub _muda_direcao {
     my $self = shift;
     my @direcoes = @_;
     @direcoes = qw(cima baixo esquerda direita) unless @direcoes;
-    $self->sprite->sequence($direcoes[int rand @direcoes ]);
+    $self->sequence($direcoes[int rand @direcoes ]);
 }
 
 sub tick {
@@ -108,7 +108,7 @@ sub tick {
     }
 
     # move o zumbi
-    my $sequencia = $self->sprite->sequence;
+    my $sequencia = $self->sequence;
     my $vel = $self->vel;
     my ($change_x, $change_y) = (0,0);
     if ($sequencia eq 'esquerda') {
