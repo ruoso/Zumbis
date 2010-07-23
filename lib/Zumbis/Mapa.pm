@@ -26,7 +26,7 @@ sub BUILDARGS {
 
     for my $object (@{$args{dados}{object}}) {
         my ($x,$y) = split /,/, $object->{position};
-        $args{colisao}[$x][$y] = 1;
+        $args{colisao}[$x][$y] = 1 if $object->{collide};
     }
 
     $args{tileset} = SDL::Image::load($args{dados}{tileset});

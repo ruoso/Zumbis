@@ -3,6 +3,7 @@ use 5.10.0;
 use strict;
 use warnings;
 use SDL;
+use SDL::Time;
 use SDL::Rect;
 use SDL::Event;
 use SDL::Events;
@@ -15,7 +16,7 @@ use Zumbis::Tiro;
 use Zumbis::Zumbi;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
-
+my $initial_ticks;
 my $heroi = SDLx::Sprite::Animated->new(
     image => 'dados/heroi.png',
     rect  => SDL::Rect->new(5,14,32,45),
@@ -104,7 +105,8 @@ sub move_heroi {
     for my $z (@zumbis) {
         next if abs($heroi_x - $z->x) > 25;
         next if abs($heroi_y - $z->y) > 25;
-        print "MORREU!\n";
+        my $result = (SDL::get_ticks() - $initial_ticks )/1000;
+        print "MORREU - Sobreviveu por $result segundos!\n";
         exit;
     }
 
@@ -153,5 +155,7 @@ $jogo->add_show_handler( \&exibicao );
 $jogo->add_move_handler( \&move_heroi );
 $jogo->add_move_handler( \&cria_zumbis );
 $jogo->add_move_handler( \&move_zumbis );
+
+$initial_ticks = SDL::get_ticks;
 $jogo->run;
 
