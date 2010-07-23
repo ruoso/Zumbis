@@ -84,7 +84,7 @@ my $last_zumbi_dt = 0;
 sub cria_zumbis {
     my $dt = shift;
     $last_zumbi_dt += $dt;
-    if ($last_zumbi_dt > 500) {
+    if ($last_zumbi_dt > 500 && scalar @zumbis < 5) {
         my ($x, $y) = $mapa->next_spawnpoint_px;
         push @zumbis, Zumbis::Zumbi->new(x => $x, y => $y);
         $last_zumbi_dt = 0;

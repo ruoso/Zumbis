@@ -18,7 +18,7 @@ has sprite => (is => 'ro', isa => 'SDLx::Sprite::Animated',
                handles => ['sequence']);
 has tx => (is => 'rw', isa => 'Int');
 has ty => (is => 'rw', isa => 'Int');
-has vel => (is => 'rw', default => 0.7);
+has vel => (is => 'rw', default => 0.3);
 has change_dt => (is => 'rw', default => \&set_new_dt  );
 has dt => (is => 'rw', default => 0 );
 
