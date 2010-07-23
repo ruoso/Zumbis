@@ -48,12 +48,14 @@ my $tela = SDLx::Surface::display(
     height => $mapa->height_px
 );
 
+my $pressed = 0;
 sub eventos {
     my $e = shift;
     return 0 if $e->type == SDL_QUIT;
     return 0 if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
+        $pressed++;
         $heroi->sequence('esquerda')  if $e->key_sym == SDLK_LEFT;
         $heroi->sequence('direita') if $e->key_sym == SDLK_RIGHT;
         $heroi->sequence('baixo')  if $e->key_sym == SDLK_DOWN;
@@ -72,6 +74,8 @@ sub eventos {
         }
     }
     elsif ( $e->type == SDL_KEYUP ) {
+        $pressed--;
+        return 1 if $pressed;
         $heroi->sequence('parado_esquerda')  if $e->key_sym == SDLK_LEFT;
         $heroi->sequence('parado_direita') if $e->key_sym == SDLK_RIGHT;
         $heroi->sequence('parado_baixo')  if $e->key_sym == SDLK_DOWN;
