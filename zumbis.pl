@@ -63,14 +63,13 @@ sub eventos {
     return 1;
 }
 
-my $last_zumbi_dt;
-
+my $last_zumbi_dt = 0;
 sub move_heroi {
     my $dt = shift;
 
-    print $dt;
-    if ($dt - $last_zumbi_dt > 5) {
-        print "aparecer zumbi";
+    $last_zumbi_dt += $dt;
+    if ($last_zumbi_dt > 500) {
+        $last_zumbi_dt = 0;
     }
 
 
