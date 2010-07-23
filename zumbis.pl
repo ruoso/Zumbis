@@ -168,9 +168,9 @@ sub move_zumbis { $_->tick($_[0], $mapa, $heroi_x, $heroi_y) for @zumbis }
 
 sub exibicao {
     $mapa->render( $tela->surface );
+    $_->render($tela->surface) for @morrendo;
     $_->render($tela->surface) for @tiros;
     $_->render($tela->surface) for @zumbis;
-    $_->render($tela->surface) for @morrendo;
     $heroi->draw_xy( $tela->surface, $heroi_x, $heroi_y );
     $tela->update;
 }
