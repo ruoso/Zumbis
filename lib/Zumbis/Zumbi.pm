@@ -53,6 +53,12 @@ sub BUILDARGS {
     return { %args, sprite => $z };
 };
 
+sub _muda_direcao {
+    my $self = shift;
+    my @direcoes = qw(cima baixo esquerda direita);
+    $self->sprite->sequence($direcoes[int rand @direcoes ]);
+}
+
 sub tick {
     my ($self, $dt, $mapa, $heroi_x, $heroi_y) = @_;
     my $tilesize = $mapa->tilesize;
@@ -61,8 +67,7 @@ sub tick {
     $self->dt( $self->dt + $dt );
     if ($self->dt > $self->change_dt) {
         $self->dt(0);
-        my @direcoes = qw(cima baixo esquerda direita);
-        $self->sprite->sequence($direcoes[int rand @direcoes ]);
+        $self->_muda_direcao();
     }
 
     # move o zumbi
@@ -77,8 +82,10 @@ sub tick {
     my $tilex = int(($self->x + $change_x + 15) / $tilesize);
     my $tiley = int(($self->y + $change_y + 35) / $tilesize);
 
-    unless ($mapa->colisao->[$tilex][$tiley]) {
-        warn $change_x . '/' . $change_y;
+    if ($mapa->colisao->[$tilex][$tiley]) {
+        $self->_muda_direcao();
+    }
+    else {
         $self->x( $self->x + $change_x);
         $self->y( $self->y + $change_y);
     }
