@@ -68,7 +68,7 @@ sub eventos {
                 when (/baixo/)    { $type = 'tpd' };
                 when (/cima/)     { $type = 'btu' };
             };
-            push @tiros, Zumbis::Tiro->new(x => int($heroi_x), y => int($heroi_y),
+            push @tiros, Zumbis::Tiro->new(x => $heroi_x, y => $heroi_y+20,
                                            type => $type);
         }
     }
