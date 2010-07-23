@@ -7,7 +7,7 @@ use SDL::Video;
 
 has x => (is => 'rw');
 has y => (is => 'rw');
-has vel => (is => 'rw', default => 0.4);
+has vel => (is => 'rw', default => 0.6);
 has type => (is => 'rw');
 has collided => (is => 'rw', default => 0);
 
@@ -25,6 +25,7 @@ my $cache_identity;
 
 sub tick {
     my ($self, $dt, $mapa) = @_;
+    return 0 if $self->{collided};
     if ($cache_identity != $mapa) {
         $cache_colisao = $mapa->colisao;
         $cache_dados = $mapa->dados;

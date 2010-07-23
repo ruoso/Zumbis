@@ -39,7 +39,7 @@ $heroi->set_sequences(
 my ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
 #$heroi->x( $heroi_x );
 #$heroi->y( $heroi_y );
-my $heroi_vel = 0.15;
+my $heroi_vel = 0.25;
 $heroi->sequence('parado_baixo');
 $heroi->start;
 
@@ -67,7 +67,7 @@ sub eventos {
                 when (/baixo/)    { $type = 'tpd' };
                 when (/cima/)     { $type = 'btu' };
             };
-            push @tiros, Zumbis::Tiro->new(x => int($heroi_x), y => int($heroi_y),
+            push @tiros, Zumbis::Tiro->new(x => $heroi_x, y => $heroi_y+20,
                                            type => $type);
         }
     }
@@ -105,6 +105,15 @@ sub move_heroi {
     }
 
     @tiros = grep { $_->tick($dt, $mapa) } @tiros;
+
+    @zumbis = grep { my $z = $_;
+                     !grep {
+                         my $t = $_;
+                         (!$t->collided &&
+                          abs($t->{x} - $z->{x})<32 &&
+                          abs($t->{y} - $z->{y})<32)?$t->collided(1):0;
+                     } @tiros
+                 } @zumbis;
 
     my $sequencia = $heroi->sequence;
     my ($change_x, $change_y) = (0,0);
