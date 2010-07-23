@@ -1,4 +1,4 @@
-package Zumbis::Zumbi;
+package Zumbis::Tiro;
 use 5.10.0;
 use Moose;
 use MooseX::Method::Signatures;
@@ -26,16 +26,16 @@ method tick($dt, $mapa) {
     my ($o_t_x, $o_t_y) = map { int($_ / $tilesize) }
       $self->x, $self->y;
 
-    my ($change_x, $change_y);
+    my ($change_x, $change_y) = (0,0);
     given ($self->type) {
-        when 'rtl' { $change_x = 0 - $self->vel * $dt };
-        when 'ltr' { $change_x = $self->vel * $dt };
-        when 'btu' { $change_y = 0 - $self->vel * $dt };
-        when 'tpd' { $change_y = $self->vel * $dt };
-    }
+        when (/rtl/) { $change_x = 0 - $self->vel * $dt };
+        when (/ltr/) { $change_x =     $self->vel * $dt };
+        when (/btu/) { $change_y = 0 - $self->vel * $dt };
+        when (/tpd/) { $change_y =     $self->vel * $dt };
+    };
 
-    $self->x($self->x + $change_x);
-    $self->y($self->y + $change_y);
+    $self->x(int($self->x + $change_x));
+    $self->y(int($self->y + $change_y));
 
     my ($tiles_x, $tiles_y) = map { int($_ / $tilesize) }
       ($change_x, $change_y);
@@ -48,8 +48,8 @@ method tick($dt, $mapa) {
            $n_t_x >= 0 &&
            $n_t_x < $mapa->width) {
         if ($mapa->colisao->[$n_t_x][$n_t_y]) {
-            $self->collided(1)
-              return;
+            $self->collided(1);
+            return;
         }
         $tiles_x -= $step_x;
         $n_t_x += $step_x;
@@ -58,8 +58,8 @@ method tick($dt, $mapa) {
            $n_t_y >= 0 &&
            $n_t_y < $mapa->height) {
         if ($mapa->colisao->[$n_t_x][$n_t_y]) {
-            $self->collided(1)
-              return;
+            $self->collided(1);
+            return;
         }
         $tiles_y -= $step_y;
         $n_t_y += $step_y;

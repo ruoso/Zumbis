@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+use 5.10.0;
 use strict;
 use warnings;
 use SDL;
@@ -11,6 +12,7 @@ use SDLx::Surface;
 use SDLx::Controller;
 use Collision::2D ':all';
 use Zumbis::Mapa;
+use Zumbis::Tiro;
 use Zumbis::Zumbi;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
@@ -57,6 +59,18 @@ sub eventos {
         $heroi->sequence('direita') if $e->key_sym == SDLK_RIGHT;
         $heroi->sequence('baixo')  if $e->key_sym == SDLK_DOWN;
         $heroi->sequence('cima')    if $e->key_sym == SDLK_UP;
+
+        if ($e->key_sym == SDLK_SPACE && scalar @tiros < 2) {
+            my $type;
+            given ($heroi->sequence) {
+                when (/esquerda/) { $type = 'rtl' };
+                when (/direita/)  { $type = 'ltr' };
+                when (/baixo/)    { $type = 'tpd' };
+                when (/cima/)     { $type = 'btu' };
+            };
+            push @tiros, Zumbis::Tiro->new(x => int($heroi_x), y => int($heroi_y),
+                                           type => $type);
+        }
     }
     elsif ( $e->type == SDL_KEYUP ) {
         $heroi->sequence('parado_esquerda')  if $e->key_sym == SDLK_LEFT;
@@ -79,6 +93,8 @@ sub move_heroi {
         exit;
     }
 
+    $_->tick($dt, $mapa) for @tiros;
+    @tiros = grep { !$_->collided } @tiros;
 
     $last_zumbi_dt += $dt;
     if ($last_zumbi_dt > 500) {
@@ -89,7 +105,7 @@ sub move_heroi {
 
 
     my $sequencia = $heroi->sequence;
-    my ($change_x, $change_y);
+    my ($change_x, $change_y) = (0,0);
     $change_x = 0 - $heroi_vel * $dt if $sequencia eq 'esquerda';
     $change_x = $heroi_vel * $dt if $sequencia eq 'direita';
     $change_y = 0 - $heroi_vel * $dt if $sequencia eq 'cima';
