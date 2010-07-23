@@ -1,5 +1,5 @@
 package Zumbis::Zumbi;
-use Moose;
+use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;

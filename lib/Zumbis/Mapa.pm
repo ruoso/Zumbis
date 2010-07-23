@@ -1,5 +1,5 @@
 package Zumbis::Mapa;
-use Moose;
+use Mouse;
 use XML::Compile::Schema;
 use XML::Compile::Util qw(pack_type);
 use constant MAP_NS => 'http://perl.org.br/games/zumbis';
