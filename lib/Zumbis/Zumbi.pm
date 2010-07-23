@@ -1,6 +1,5 @@
 package Zumbis::Zumbi;
 use Moose;
-use MooseX::Method::Signatures;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
@@ -19,14 +18,14 @@ has sprite => (is => 'ro', isa => 'SDLx::Sprite::Animated',
                handles => ['sequence']);
 has tx => (is => 'rw', isa => 'Int');
 has ty => (is => 'rw', isa => 'Int');
-has vel => (is => 'rw', default => 0.1);
+has vel => (is => 'rw', default => 0.7);
 has change_dt => (is => 'rw', default => \&set_new_dt  );
 has dt => (is => 'rw', default => 0 );
 
-sub set_new_dt { (0.3 + rand 1) }
+sub set_new_dt { (500 + rand 10) }
 
-around 'BUILDARGS' => sub {
-    my ($orig, $self, %args) = @_;
+sub BUILDARGS {
+    my ($self, %args) = @_;
 
     my $z = SDLx::Sprite::Animated->new
       ( image => SPRITE_IMAGE,
@@ -51,15 +50,17 @@ around 'BUILDARGS' => sub {
     $z->sequence('parado_baixo');
     $z->start();
 
-    return $orig->($self, %args, sprite => $z);
+    return { %args, sprite => $z };
 };
 
-method tick($dt, $mapa, $heroi_x, $heroi_y) {
+sub tick {
+    my ($self, $dt, $mapa, $heroi_x, $heroi_y) = @_;
     my $tilesize = $mapa->tilesize;
 
     # muda a direcao do zumbi com o tempo
     $self->dt( $self->dt + $dt );
     if ($self->dt > $self->change_dt) {
+        $self->dt(0);
         my @direcoes = qw(cima baixo esquerda direita);
         $self->sprite->sequence($direcoes[int rand @direcoes ]);
     }
@@ -102,13 +103,14 @@ method tick($dt, $mapa, $heroi_x, $heroi_y) {
 #    }
 }
 
-method rect {
-    return SDL::Rect->new($self->x + 15, $self->y + 35,
+sub rect {
+    return SDL::Rect->new($_[0]->x + 15, $_[0]->y + 35,
                           32,32);
 }
 
 
-method render($surface) {
+sub render {
+    my ($self, $surface) = @_;
     $self->sprite->draw_xy( $surface, $self->x, $self->y );
 }
 
