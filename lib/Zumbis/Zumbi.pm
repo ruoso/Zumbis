@@ -21,7 +21,6 @@ has tx => (is => 'rw', isa => 'Int');
 has ty => (is => 'rw', isa => 'Int');
 has vel => (is => 'rw', default => 0.1);
 
-
 around 'BUILDARGS' => sub {
     my ($orig, $self, %args) = @_;
 

@@ -25,6 +25,7 @@ my $cache_identity;
 
 sub tick {
     my ($self, $dt, $mapa) = @_;
+    return 0 if $self->{collided};
     if ($cache_identity != $mapa) {
         $cache_colisao = $mapa->colisao;
         $cache_dados = $mapa->dados;

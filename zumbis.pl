@@ -95,6 +95,14 @@ sub move_heroi {
 
     @tiros = grep { $_->tick($dt, $mapa) } @tiros;
 
+    @zumbis = grep { my $z = $_;
+                     !grep {
+                         my $t = $_;
+                         (abs($t->{x} - $z->{x})<32 &&
+                          abs($t->{y} - $z->{y})<32)?$t->collided(1):0;
+                     } @tiros
+                 } @zumbis;
+
     $last_zumbi_dt += $dt;
     if ($last_zumbi_dt > 500) {
         my ($x, $y) = $mapa->next_spawnpoint_px;
