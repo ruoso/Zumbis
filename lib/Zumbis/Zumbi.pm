@@ -13,14 +13,17 @@ use constant SPRITE_WIDTH => 32;
 use constant SPRITE_HEIGHT => 45;
 use constant SPRITE_TPS => 2;
 
-has x => (is => 'rw', isa => 'Int', required => 1);
-has y => (is => 'rw', isa => 'Int', required => 1);
+has x => (is => 'rw', required => 1);
+has y => (is => 'rw', required => 1);
 has sprite => (is => 'ro', isa => 'SDLx::Sprite::Animated',
                handles => ['sequence']);
 has tx => (is => 'rw', isa => 'Int');
 has ty => (is => 'rw', isa => 'Int');
 has vel => (is => 'rw', default => 0.1);
+has change_dt => (is => 'rw', default => \&set_new_dt  );
+has dt => (is => 'rw', default => 0 );
 
+sub set_new_dt { (0.3 + rand 1) }
 
 around 'BUILDARGS' => sub {
     my ($orig, $self, %args) = @_;
@@ -54,30 +57,56 @@ around 'BUILDARGS' => sub {
 method tick($dt, $mapa, $heroi_x, $heroi_y) {
     my $tilesize = $mapa->tilesize;
 
-    my ($h_t_x, $h_t_y, $z_t_x, $z_t_y) = map { int($_ / $tilesize) }
-      $heroi_x, $heroi_y, $self->x, $self->y;
-
-    if (!$self->tx ||
-        !$self->ty ||
-        $z_t_x != $self->tx ||
-        $z_t_y != $self->ty) {
-
-        # acabou de mudar de quadrado... então pode decidir a direção
-        $self->tx($z_t_x);
-        $self->ty($z_t_y);
-
-        # decidir a próxima direção... precisamos fazer uma cópia do
-        # mapa de colisão para fazer o algoritmo de shortest-path do
-        # Dijkstra.
-        
-        
+    # muda a direcao do zumbi com o tempo
+    $self->dt( $self->dt + $dt );
+    if ($self->dt > $self->change_dt) {
+        my @direcoes = qw(cima baixo esquerda direita);
+        $self->sprite->sequence($direcoes[int rand @direcoes ]);
     }
+
+    # move o zumbi
+    my $sequencia = $self->sprite->sequence;
+    my $vel = $self->vel;
+    my ($change_x, $change_y) = (0,0);
+    if    ($sequencia eq 'esquerda') { $change_x = 0 - $vel * $dt }
+    elsif ($sequencia eq 'direita' ) { $change_x = $vel * $dt     }
+    elsif ($sequencia eq 'cima'    ) { $change_y = 0 - $vel * $dt }
+    elsif ($sequencia eq 'baixo'   ) { $change_y = $vel * $dt     }
+
+    my $tilex = int(($self->x + $change_x + 15) / $tilesize);
+    my $tiley = int(($self->y + $change_y + 35) / $tilesize);
+
+    unless ($mapa->colisao->[$tilex][$tiley]) {
+        warn $change_x . '/' . $change_y;
+        $self->x( $self->x + $change_x);
+        $self->y( $self->y + $change_y);
+    }
+
+#    my ($h_t_x, $h_t_y, $z_t_x, $z_t_y) = map { int($_ / $tilesize) }
+#      $heroi_x, $heroi_y, $self->x, $self->y;
+#
+#    if (!$self->tx ||
+#        !$self->ty ||
+#        $z_t_x != $self->tx ||
+#        $z_t_y != $self->ty) {
+#
+#        # acabou de mudar de quadrado... então pode decidir a direção
+#        $self->tx($z_t_x);
+#        $self->ty($z_t_y);
+#
+#        # decidir a próxima direção... precisamos fazer uma cópia do
+#        # mapa de colisão para fazer o algoritmo de shortest-path do
+#        # Dijkstra.
+#        
+#        
+#    }
 }
 
 method rect {
     return SDL::Rect->new($self->x + 15, $self->y + 35,
                           32,32);
 }
+
 
 method render($surface) {
     $self->sprite->draw_xy( $surface, $self->x, $self->y );
