@@ -73,7 +73,7 @@ sub eventos {
             $pressed++;
             $heroi->sequence('cima');
         }
-        elsif ($tecla == SDLK_SPACE && scalar @tiros < 2) {
+        elsif ($tecla == SDLK_SPACE && scalar @tiros < 4) {
             my $type;
             given ($heroi->sequence) {
                 when (/esquerda/) { $type = 'rtl' };
