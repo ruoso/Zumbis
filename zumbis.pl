@@ -55,13 +55,24 @@ sub eventos {
     return 0 if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
-        $pressed++;
-        $heroi->sequence('esquerda')  if $e->key_sym == SDLK_LEFT;
-        $heroi->sequence('direita') if $e->key_sym == SDLK_RIGHT;
-        $heroi->sequence('baixo')  if $e->key_sym == SDLK_DOWN;
-        $heroi->sequence('cima')    if $e->key_sym == SDLK_UP;
-
-        if ($e->key_sym == SDLK_SPACE && scalar @tiros < 2) {
+        my $tecla = $e->key_sym;
+        if ($tecla == SDLK_LEFT) {
+            $pressed++;
+            $heroi->sequence('esquerda');
+        }
+        elsif ($tecla == SDLK_RIGHT) {
+            $pressed++;
+            $heroi->sequence('direita');
+        }
+        elsif ($tecla == SDLK_DOWN) {
+            $pressed++;
+            $heroi->sequence('baixo');
+        }
+        elsif($tecla == SDLK_UP) {
+            $pressed++;
+            $heroi->sequence('cima');
+        }
+        elsif ($tecla == SDLK_SPACE && scalar @tiros < 2) {
             my $type;
             given ($heroi->sequence) {
                 when (/esquerda/) { $type = 'rtl' };
@@ -74,12 +85,19 @@ sub eventos {
         }
     }
     elsif ( $e->type == SDL_KEYUP ) {
-        $pressed--;
-        return 1 if $pressed;
-        $heroi->sequence('parado_esquerda')  if $e->key_sym == SDLK_LEFT;
-        $heroi->sequence('parado_direita') if $e->key_sym == SDLK_RIGHT;
-        $heroi->sequence('parado_baixo')  if $e->key_sym == SDLK_DOWN;
-        $heroi->sequence('parado_cima')    if $e->key_sym == SDLK_UP;
+        my $tecla = $e->key_sym;
+        if ($tecla == SDLK_LEFT) {
+            $heroi->sequence('parado_esquerda') unless --$pressed;
+        }
+        elsif ($tecla == SDLK_RIGHT) {
+            $heroi->sequence('parado_direita') unless --$pressed;
+        }
+        elsif ($tecla == SDLK_DOWN) {
+            $heroi->sequence('parado_baixo')  unless --$pressed;
+        }
+        elsif ($tecla == SDLK_UP) {
+            $heroi->sequence('parado_cima') unless --$pressed;
+        }
     }
     return 1;
 }
