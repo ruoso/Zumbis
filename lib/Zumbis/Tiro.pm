@@ -21,7 +21,7 @@ my %rects =
 
 my $cache_colisao;
 my $cache_dados;
-my $cache_identity;
+my $cache_identity = 0;
 
 sub tick {
     my ($self, $dt, $mapa) = @_;

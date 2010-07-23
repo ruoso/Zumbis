@@ -37,14 +37,18 @@ sub BUILDARGS {
       );
 
     $z->set_sequences
-      ( parado_esquerda => [ [1, 3] ],
-        parado_direita  => [ [1, 1] ],
-        parado_cima     => [ [1, 0] ],
-        parado_baixo    => [ [1, 2] ],
-        esquerda        => [ [0,3], [1,3], [2,3] ],
-        direita         => [ [0,1], [1,1], [2,1] ],
-        cima            => [ [0,0], [1,0], [2,0] ],
-        baixo           => [ [0,2], [1,2], [2,2] ],
+      ( parado_esquerda   => [ [1, 3] ],
+        parado_direita    => [ [1, 1] ],
+        parado_cima       => [ [1, 0] ],
+        parado_baixo      => [ [1, 2] ],
+        esquerda          => [ [0,3], [1,3], [2,3] ],
+        direita           => [ [0,1], [1,1], [2,1] ],
+        cima              => [ [0,0], [1,0], [2,0] ],
+        baixo             => [ [0,2], [1,2], [2,2] ],
+        morrendo_cima     => [ [0,4], [1,4], [2,4] ],
+        morrendo_direita  => [ [0,5], [1,5], [2,5] ],
+        morrendo_baixo    => [ [0,6], [1,6], [2,6] ],
+        morrendo_esquerda => [ [0,7], [1,7], [2,7] ],
       );
 
     $z->sequence('parado_baixo');
