@@ -44,10 +44,10 @@ sub BUILDARGS {
         direita           => [ [0,1], [1,1], [2,1] ],
         cima              => [ [0,0], [1,0], [2,0] ],
         baixo             => [ [0,2], [1,2], [2,2] ],
-        morrendo_cima     => [ [0,4], [1,4], [2,4] ],
-        morrendo_direita  => [ [0,5], [1,5], [2,5] ],
-        morrendo_baixo    => [ [0,6], [1,6], [2,6] ],
-        morrendo_esquerda => [ [0,7], [1,7], [2,7] ],
+        morrendo_cima     => [ [0,4], [1,4], [2,4], [0,8], [1,8], [2,8] ],
+        morrendo_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
+        morrendo_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
+        morrendo_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
       );
 
     $z->sequence('parado_baixo');
