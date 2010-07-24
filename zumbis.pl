@@ -20,14 +20,19 @@ use Zumbis::Audio;
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 my $initial_ticks;
 
-my $surf_heroi = SDL::Image::load('dados/heroi.png') or die 'erro ao abrir a imagem';
-my $surf_heroina = SDL::Image::load('dados/heroina.png') or die 'erro ao abrir a imagem';
-
 my $heroi = SDLx::Sprite::Animated->new(
-    surface => $surf_heroina,
+    image => 'dados/heroi.png',
     rect  => SDL::Rect->new(5,14,32,45),
     ticks_per_frame => 2,
 );
+my $heroina = SDLx::Sprite::Animated->new(
+    image => 'dados/heroina.png',
+    rect  => SDL::Rect->new(5,14,32,45),
+    ticks_per_frame => 2,
+);
+
+my $player = $heroina;
+
 my $telagameover;
 
 my $jogo;
@@ -35,7 +40,7 @@ my @zumbis;
 my @morrendo;
 my @tiros;
 
-$heroi->set_sequences(
+my $sequences = {
     parado_esquerda => [ [1, 3] ],
     parado_direita  => [ [1, 1] ],
     parado_cima     => [ [1, 0] ],
@@ -44,14 +49,17 @@ $heroi->set_sequences(
     direita         => [ [0,1], [1,1], [2,1] ],
     cima            => [ [0,0], [1,0], [2,0] ],
     baixo           => [ [0,2], [1,2], [2,2] ],
-);
+};
+$heroi->set_sequences(%$sequences);
+$heroina->set_sequences(%$sequences);
 
-my ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
-#$heroi->x( $heroi_x );
-#$heroi->y( $heroi_y );
-my $heroi_vel = 0.25;
-$heroi->sequence('parado_baixo');
-$heroi->start;
+
+my ( $player_x, $player_y ) = $mapa->playerstart_px;
+#$player->x( $player_x );
+#$player->y( $player_y );
+my $player_vel = 0.25;
+$player->sequence('parado_baixo');
+$player->start;
 
 my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
@@ -83,39 +91,39 @@ sub eventos {
         }
         elsif ($tecla == SDLK_SPACE && scalar @tiros < 4) {
             my $type;
-            given ($heroi->sequence) {
+            given ($player->sequence) {
                 when (/esquerda/) { $type = 'rtl' };
                 when (/direita/)  { $type = 'ltr' };
                 when (/baixo/)    { $type = 'tpd' };
                 when (/cima/)     { $type = 'btu' };
             };
-            push @tiros, Zumbis::Tiro->new(x => $heroi_x, y => $heroi_y+20,
+            push @tiros, Zumbis::Tiro->new(x => $player_x, y => $player_y+20,
                                            type => $type);
         }
         if (%pressed) {
-            $heroi->sequence((keys %pressed)[0]);
+            $player->sequence((keys %pressed)[0]);
         }
     }
     elsif ( $e->type == SDL_KEYUP ) {
         my $tecla = $e->key_sym;
         if ($tecla == SDLK_LEFT) {
             delete $pressed{esquerda};
-            $heroi->sequence('parado_esquerda')  unless %pressed;
+            $player->sequence('parado_esquerda')  unless %pressed;
         }
         elsif ($tecla == SDLK_RIGHT) {
             delete $pressed{direita};
-            $heroi->sequence('parado_direita')  unless %pressed;;
+            $player->sequence('parado_direita')  unless %pressed;;
         }
         elsif ($tecla == SDLK_DOWN) {
             delete $pressed{baixo};
-            $heroi->sequence('parado_baixo')  unless %pressed;
+            $player->sequence('parado_baixo')  unless %pressed;
         }
         elsif ($tecla == SDLK_UP) {
             delete $pressed{cima};
-            $heroi->sequence('parado_cima') unless %pressed;
+            $player->sequence('parado_cima') unless %pressed;
         }
         if (%pressed) {
-            $heroi->sequence((keys %pressed)[0]);
+            $player->sequence((keys %pressed)[0]);
         }
     }
     return 1;
@@ -139,8 +147,8 @@ sub move_heroi {
     # verifica se o heroi foi tocado por um zumbi
     # (condicao de derrota)
     for my $z (@zumbis) {
-        next if abs($heroi_x - $z->x) > 25;
-        next if abs($heroi_y - $z->y) > 25;
+        next if abs($player_x - $z->x) > 25;
+        next if abs($player_y - $z->y) > 25;
         init_game_over();
     }
 
@@ -159,33 +167,33 @@ sub move_heroi {
                      } @tiros
                  } @zumbis;
 
-    my $sequencia = $heroi->sequence;
+    my $sequencia = $player->sequence;
     my ($change_x, $change_y) = (0,0);
-    $change_x = 0 - $heroi_vel * $dt if $sequencia eq 'esquerda';
-    $change_x = $heroi_vel * $dt if $sequencia eq 'direita';
-    $change_y = 0 - $heroi_vel * $dt if $sequencia eq 'cima';
-    $change_y = $heroi_vel * $dt if $sequencia eq 'baixo';
+    $change_x = 0 - $player_vel * $dt if $sequencia eq 'esquerda';
+    $change_x = $player_vel * $dt if $sequencia eq 'direita';
+    $change_y = 0 - $player_vel * $dt if $sequencia eq 'cima';
+    $change_y = $player_vel * $dt if $sequencia eq 'baixo';
 
-    my $tilex = int(($heroi_x + $change_x + 15) / $tilesize);
-    my $tiley = int(($heroi_y + $change_y + 35) / $tilesize);
+    my $tilex = int(($player_x + $change_x + 15) / $tilesize);
+    my $tiley = int(($player_y + $change_y + 35) / $tilesize);
 
     unless ($mapa->colisao->[$tilex][$tiley]) {
-        $heroi_x += $change_x;
-        $heroi_y += $change_y;
+        $player_x += $change_x;
+        $player_y += $change_y;
     }
 
 
 }
 
 
-sub move_zumbis { $_->tick($_[0], $mapa, $heroi_x, $heroi_y) for @zumbis }
+sub move_zumbis { $_->tick($_[0], $mapa, $player_x, $player_y) for @zumbis }
 
 sub exibicao {
     $mapa->render( $tela->surface );
     $_->render($tela->surface) for @morrendo;
     $_->render($tela->surface) for @tiros;
     $_->render($tela->surface) for @zumbis;
-    $heroi->draw_xy( $tela->surface, $heroi_x, $heroi_y );
+    $player->draw_xy( $tela->surface, $player_x, $player_y );
     $tela->update;
 }
 
@@ -199,16 +207,16 @@ sub eventos_gameover {
         if ($tecla == SDLK_RETURN || $tecla == SDLK_1 || $tecla == SDLK_2) {
 
             if ($tecla == SDLK_1) {
-                $heroi->handle_surface($surf_heroi);
+                $player = $heroi;
             } elsif ($tecla == SDLK_2) {
-                $heroi->handle_surface($surf_heroina);
+                $player = $heroina;
             }
 
             @zumbis = ();
             @morrendo = ();
             @tiros = ();
-            ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
-            $heroi->sequence('parado_baixo');
+            ( $player_x, $player_y ) = $mapa->playerstart_px;
+            $player->sequence('parado_baixo');
             init_game();
         }
     }
