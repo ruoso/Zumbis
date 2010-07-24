@@ -4,12 +4,20 @@ use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
+use Zumbis::Audio;
 
 has x => (is => 'rw');
 has y => (is => 'rw');
 has vel => (is => 'rw', default => 0.8);
 has type => (is => 'rw');
 has collided => (is => 'rw', default => 0);
+has sound => ( is => 'ro',
+               default => sub { Zumbis::Audio->load_sound('dados/shot.ogg') }
+             );
+
+sub BUILD {
+    Zumbis::Audio->play( shift->sound );
+}
 
 my $sprites = SDL::Image::load('dados/bullet.png');
 my %rects =
