@@ -256,3 +256,4 @@ $jogo = SDLx::Controller->new(dt => 0.3);
 init_game();
 $jogo->run;
 
+SDL::quit;
