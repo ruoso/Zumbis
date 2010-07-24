@@ -48,6 +48,10 @@ sub BUILDARGS {
         morrendo_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
         morrendo_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
         morrendo_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
+        morrendo_parado_cima     => [ [0,4], [1,4], [2,4], [0,8], [1,8], [2,8] ],
+        morrendo_parado_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
+        morrendo_parado_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
+        morrendo_parado_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
       );
 
     $z->sequence('parado_baixo');

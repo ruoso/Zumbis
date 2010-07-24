@@ -158,13 +158,17 @@ sub move_heroi {
     @zumbis = grep { my $z = $_;
                      !grep {
                          my $t = $_;
-                         (!$t->collided &&
-                          abs($t->{x} - $z->{x})<32 &&
-                          abs($t->{y} - $z->{y})<32)
-                           ?($z->sequence($z->sequence!~/morrendo/?'morrendo_'.$z->sequence:()),
-                             push(@morrendo,$z),
-                             $t->collided(1)
-                            ):0;
+                         ((!$t->collided &&
+                           (($player->sequence =~ 'cima'
+                             || $player->sequence =~ 'baixo')?
+                            (abs($t->{x} - 10 - $z->{x})<20 &&
+                             abs($t->{y} - $z->{y})<20):
+                            (abs($t->{x} - $z->{x})<20 &&
+                             abs($t->{y} - $z->{y}-10)<10)))?
+                           ($z->sequence($z->sequence!~/morrendo/?'morrendo_'.$z->sequence:()),
+                            push(@morrendo,$z),
+                            $t->collided(1)
+                           ):0);
                      } @tiros
                  } @zumbis;
 
