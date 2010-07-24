@@ -4,9 +4,18 @@ use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
 use SDLx::Surface;
+use SDL::TTF;
+use utf8;
 
+has tempo => (is => 'ro', required => 1);
 has ultimo_frame => (is => 'ro', required => 1);
+has texto => (is => 'ro', required => 1);
 my $image = SDLx::Surface->new(surface => SDL::Image::load('dados/gameover.png'));
+
+SDL::TTF::init;
+my $font = SDL::TTF::open_font('dados/AtariSmall.ttf', 30) or
+  die 'Erro carregando a fonte';
+my $color = SDL::Color->new(0,0,0);
 
 sub BUILDARGS {
     my ($self, %args) = @_;
@@ -20,7 +29,11 @@ sub BUILDARGS {
     my $rect2 =  SDL::Rect->new(0,0,$surface->w,$surface->h);
     $surface->blit($ultimo_frame, $rect1, $rect2);
 
+    my $texto = SDL::TTF::render_text_blended($font, "Voce sobreviveu por ".$args{tempo}." segundos!", $color)
+      or die 'TTF render error: ' . SDL::get_error;
+
     $args{ultimo_frame} = $ultimo_frame;
+    $args{texto} = $texto;
     return \%args;
 }
 
@@ -33,6 +46,13 @@ sub render {
     my $srcrect = SDL::Rect->new(0,0,759,408);
     my $dstrect = SDL::Rect->new($surface->w/2-759/2,$surface->h/2-408/2,759,408);
     $image->blit($surface, $srcrect, $dstrect);
+
+    my $texto = $self->texto;
+    my $texto_w = $texto->w;
+    my $texto_h = $texto->h;
+    $srcrect = SDL::Rect->new(0,0,$texto_w,$texto_h);
+    $dstrect = SDL::Rect->new($surface->w/2-$texto_w/2,$surface->h/2-$texto_h/2,$texto_w,$texto_h);
+    SDL::Video::blit_surface($texto, $srcrect, $surface->surface, $dstrect);
 }
 
 __PACKAGE__->meta->make_immutable();

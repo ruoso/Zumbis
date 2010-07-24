@@ -133,8 +133,6 @@ sub move_heroi {
     for my $z (@zumbis) {
         next if abs($heroi_x - $z->x) > 25;
         next if abs($heroi_y - $z->y) > 25;
-        my $result = (SDL::get_ticks() - $initial_ticks )/1000;
-        print "MORREU - Sobreviveu por $result segundos!\n";
         init_game_over();
     }
 
@@ -209,6 +207,7 @@ sub render_gameover {
 
 sub init_game {
     $jogo->remove_all_handlers;
+    $initial_ticks = SDL::get_ticks;
     $jogo->add_event_handler( \&eventos );
     $jogo->add_show_handler( \&exibicao );
     $jogo->add_move_handler( \&move_heroi );
@@ -219,15 +218,16 @@ sub init_game {
 sub init_game_over {
     %pressed = ();
     $jogo->remove_all_handlers;
-    $telagameover = Zumbis::TelaGameOver->new(surface => $tela);
+    my $result = (SDL::get_ticks() - $initial_ticks )/1000;
+    $telagameover = Zumbis::TelaGameOver->new(surface => $tela,
+                                              tempo => $result );
     $tela->update();
     $jogo->add_event_handler( \&eventos_gameover );
     #$jogo->add_move_handler( \&animar_gameover );
     $jogo->add_show_handler( \&render_gameover );
 }
 
-$initial_ticks = SDL::get_ticks;
-$jogo = SDLx::Controller->new;
+$jogo = SDLx::Controller->new(dt => 0.3);
 init_game();
 $jogo->run;
 
