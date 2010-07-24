@@ -161,7 +161,7 @@ sub move_heroi {
                          (!$t->collided &&
                           abs($t->{x} - $z->{x})<32 &&
                           abs($t->{y} - $z->{y})<32)
-                           ?($z->sequence($z->sequence=~/morrendo/?'morrendo_'.$z->sequence:()),
+                           ?($z->sequence($z->sequence!~/morrendo/?'morrendo_'.$z->sequence:()),
                              push(@morrendo,$z),
                              $t->collided(1)
                             ):0;
