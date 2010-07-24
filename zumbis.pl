@@ -63,7 +63,8 @@ $player->start;
 
 my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
-    height => $mapa->height_px
+    height => $mapa->height_px,
+    flags => SDL_FULLSCREEN,
 );
 
 Zumbis::Audio->init;
