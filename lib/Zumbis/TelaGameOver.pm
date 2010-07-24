@@ -10,6 +10,8 @@ use utf8;
 has tempo => (is => 'ro', required => 1);
 has ultimo_frame => (is => 'ro', required => 1);
 has texto => (is => 'ro', required => 1);
+has texto_sc => (is => 'ro', required => 1);
+
 my $image = SDLx::Surface->new(surface => SDL::Image::load('dados/gameover.png'));
 
 SDL::TTF::init;
@@ -41,9 +43,12 @@ sub BUILDARGS {
 
     my $texto = SDL::TTF::render_text_blended($font, "Voce sobreviveu por ".$args{tempo}." segundos!", $color)
       or die 'TTF render error: ' . SDL::get_error;
+    my $texto_sc = SDL::TTF::render_text_blended($font, "E matou ".$args{score}." zumbi".($args{score}!=1?"s":'')."!", $color)
+      or die 'TTF render error: ' . SDL::get_error;
 
     $args{ultimo_frame} = $ultimo_frame;
     $args{texto} = $texto;
+    $args{texto_sc} = $texto_sc;
     return \%args;
 }
 
@@ -63,6 +68,14 @@ sub render {
     $srcrect = SDL::Rect->new(0,0,$texto_w,$texto_h);
     $dstrect = SDL::Rect->new($surface->w/2-$texto_w/2,$surface->h/2-$texto_h/2,$texto_w,$texto_h);
     SDL::Video::blit_surface($texto, $srcrect, $surface->surface, $dstrect);
+
+    my $texto_sc = $self->texto_sc;
+    my $texto_sc_w = $texto_sc->w;
+    my $texto_sc_h = $texto_sc->h;
+    $srcrect = SDL::Rect->new(0,0,$texto_sc_w,$texto_sc_h);
+    $dstrect = SDL::Rect->new($surface->w/2-$texto_sc_w/2,$surface->h/2-$texto_sc_h/2+$texto_h+15,$texto_w,$texto_h);
+    SDL::Video::blit_surface($texto_sc, $srcrect, $surface->surface, $dstrect);
+
 
     $dstrect = SDL::Rect->new(40,$surface->h - $selectchar_h - 60,$selectchar_w,$selectchar_h);
     SDL::Video::blit_surface($selectchar, $selectchar_srcrect, $surface->surface, $dstrect);

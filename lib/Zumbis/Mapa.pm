@@ -78,7 +78,7 @@ sub tilesize {
 }
 
 sub render {
-    my ($self, $surface, $tempo) = @_;
+    my ($self, $surface, $tempo, $score) = @_;
     my $tilesize = $self->dados->{tilesize};
     my $tileset  = $self->tileset;
 
@@ -107,7 +107,7 @@ sub render {
 
     my $timer =
       SDL::TTF::render_text_blended
-          ($font_p, $tempo, $color)
+          ($font_p, "Mortes: $score. $tempo segundos", $color)
             or die 'TTF render error: ' . SDL::get_error;
     my $timer_w = $timer->w;
     my $timer_h = $timer->h;

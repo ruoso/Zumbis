@@ -19,6 +19,7 @@ use Zumbis::Audio;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 my $initial_ticks;
+my $score = 0;
 
 my $heroi = SDLx::Sprite::Animated->new(
     image => 'dados/heroi.png',
@@ -167,6 +168,7 @@ sub move_heroi {
                              abs($t->{y} - 25 - $z->{y})<25)))?
                            ($z->sequence($z->sequence!~/morrendo/?'morrendo_'.$z->sequence:()),
                             push(@morrendo,$z),
+                            $score++,
                             $t->collided(1)
                            ):0);
                      } @tiros
@@ -184,6 +186,8 @@ sub move_heroi {
     my $end_tilex = ($player_x + 32 + $change_x) / $tilesize;
     my $end_tiley = ($player_y + 32 + $change_y) / $tilesize;
     if (!$mapa->colisao->[$start_tilex][$start_tiley] &&
+        !$mapa->colisao->[$start_tilex][$end_tiley] &&
+        !$mapa->colisao->[$end_tilex][$start_tiley] &&
         !$mapa->colisao->[$end_tilex][$end_tiley]) {
         $player_x += $change_x;
         $player_y += $change_y;
@@ -197,12 +201,13 @@ sub move_zumbis { $_->tick($_[0], $mapa, $player_x, $player_y) for @zumbis }
 
 sub exibicao {
     my $result = (SDL::get_ticks() - $initial_ticks )/1000;
-    $mapa->render( $tela->surface, $result );
+    $mapa->render( $tela->surface, $result, $score );
     $_->render($tela->surface) for @morrendo;
     $_->render($tela->surface) for @tiros;
     $_->render($tela->surface) for @zumbis;
     $player->draw_xy( $tela->surface, $player_x, $player_y );
     $tela->update;
+    return $result;
 }
 
 sub eventos_gameover {
@@ -239,6 +244,7 @@ sub render_gameover {
 sub init_game {
     $jogo->remove_all_handlers;
     $initial_ticks = SDL::get_ticks;
+    $score = 0;
     $jogo->add_event_handler( \&eventos );
     $jogo->add_show_handler( \&exibicao );
     $jogo->add_move_handler( \&move_heroi );
@@ -249,9 +255,10 @@ sub init_game {
 sub init_game_over {
     %pressed = ();
     $jogo->remove_all_handlers;
-    my $result = (SDL::get_ticks() - $initial_ticks )/1000;
+    my $result = exibicao();
     $telagameover = Zumbis::TelaGameOver->new(surface => $tela,
-                                              tempo => $result );
+                                              tempo => $result,
+                                              score => $score );
     $tela->update();
     $jogo->add_event_handler( \&eventos_gameover );
     #$jogo->add_move_handler( \&animar_gameover );
