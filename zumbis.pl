@@ -14,6 +14,7 @@ use SDLx::Controller;
 use Zumbis::Mapa;
 use Zumbis::Tiro;
 use Zumbis::Zumbi;
+use Zumbis::TelaGameOver;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 my $initial_ticks;
@@ -22,7 +23,9 @@ my $heroi = SDLx::Sprite::Animated->new(
     rect  => SDL::Rect->new(5,14,32,45),
     ticks_per_frame => 2,
 );
+my $telagameover;
 
+my $jogo;
 my @zumbis;
 my @morrendo;
 my @tiros;
@@ -132,7 +135,7 @@ sub move_heroi {
         next if abs($heroi_y - $z->y) > 25;
         my $result = (SDL::get_ticks() - $initial_ticks )/1000;
         print "MORREU - Sobreviveu por $result segundos!\n";
-        exit;
+        init_game_over();
     }
 
     @tiros = grep { $_->tick($dt, $mapa) } @tiros;
@@ -142,7 +145,11 @@ sub move_heroi {
                          my $t = $_;
                          (!$t->collided &&
                           abs($t->{x} - $z->{x})<32 &&
-                          abs($t->{y} - $z->{y})<32)?($z->sequence('morrendo_'.$z->sequence),push(@morrendo,$z),$t->collided(1)):0;
+                          abs($t->{y} - $z->{y})<32)
+                           ?($z->sequence('morrendo_'.$z->sequence),
+                             push(@morrendo,$z),
+                             $t->collided(1)
+                            ):0;
                      } @tiros
                  } @zumbis;
 
@@ -164,6 +171,7 @@ sub move_heroi {
 
 }
 
+
 sub move_zumbis { $_->tick($_[0], $mapa, $heroi_x, $heroi_y) for @zumbis }
 
 sub exibicao {
@@ -175,13 +183,51 @@ sub exibicao {
     $tela->update;
 }
 
-my $jogo = SDLx::Controller->new;
-$jogo->add_event_handler( \&eventos );
-$jogo->add_show_handler( \&exibicao );
-$jogo->add_move_handler( \&move_heroi );
-$jogo->add_move_handler( \&cria_zumbis );
-$jogo->add_move_handler( \&move_zumbis );
+sub eventos_gameover {
+    my $e = shift;
+    return 0 if $e->type == SDL_QUIT;
+    return 0 if $e->key_sym == SDLK_ESCAPE;
+
+    if ( $e->type == SDL_KEYDOWN ) {
+        my $tecla = $e->key_sym;
+        if ($tecla == SDLK_SPACE) {
+            @zumbis = ();
+            @morrendo = ();
+            @tiros = ();
+            ( $heroi_x, $heroi_y ) = $mapa->playerstart_px;
+            $heroi->sequence('parado_baixo');
+            init_game();
+        }
+    }
+    return 1;
+}
+
+sub render_gameover {
+    $telagameover->render($tela);
+    $tela->update;
+}
+
+sub init_game {
+    $jogo->remove_all_handlers;
+    $jogo->add_event_handler( \&eventos );
+    $jogo->add_show_handler( \&exibicao );
+    $jogo->add_move_handler( \&move_heroi );
+    $jogo->add_move_handler( \&cria_zumbis );
+    $jogo->add_move_handler( \&move_zumbis );
+}
+
+sub init_game_over {
+    %pressed = ();
+    $jogo->remove_all_handlers;
+    $telagameover = Zumbis::TelaGameOver->new(surface => $tela);
+    $tela->update();
+    $jogo->add_event_handler( \&eventos_gameover );
+    #$jogo->add_move_handler( \&animar_gameover );
+    $jogo->add_show_handler( \&render_gameover );
+}
 
 $initial_ticks = SDL::get_ticks;
+$jogo = SDLx::Controller->new;
+init_game();
 $jogo->run;
 
