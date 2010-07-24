@@ -19,8 +19,12 @@ use Zumbis::Audio;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 my $initial_ticks;
+
+my $surf_heroi = SDL::Image::load('dados/heroi.png') or die 'erro ao abrir a imagem';
+my $surf_heroina = SDL::Image::load('dados/heroina.png') or die 'erro ao abrir a imagem';
+
 my $heroi = SDLx::Sprite::Animated->new(
-    image => 'dados/heroi.png',
+    surface => $surf_heroina,
     rect  => SDL::Rect->new(5,14,32,45),
     ticks_per_frame => 2,
 );
@@ -192,7 +196,14 @@ sub eventos_gameover {
 
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
-        if ($tecla == SDLK_RETURN) {
+        if ($tecla == SDLK_RETURN || $tecla == SDLK_1 || $tecla == SDLK_2) {
+
+            if ($tecla == SDLK_1) {
+                $heroi->handle_surface($surf_heroi);
+            } elsif ($tecla == SDLK_2) {
+                $heroi->handle_surface($surf_heroina);
+            }
+
             @zumbis = ();
             @morrendo = ();
             @tiros = ();

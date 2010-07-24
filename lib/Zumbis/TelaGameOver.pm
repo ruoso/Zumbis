@@ -15,7 +15,17 @@ my $image = SDLx::Surface->new(surface => SDL::Image::load('dados/gameover.png')
 SDL::TTF::init;
 my $font = SDL::TTF::open_font('dados/AtariSmall.ttf', 30) or
   die 'Erro carregando a fonte';
+my $font_p = SDL::TTF::open_font('dados/AtariSmall.ttf', 16) or
+  die 'Erro carregando a fonte';
 my $color = SDL::Color->new(0,0,0);
+
+my $selectchar =
+  SDL::TTF::render_text_blended
+  ($font_p, "Aperte 1 para Heroi, 2 para Heroina ou enter para continuar!", $color)
+  or die 'TTF render error: ' . SDL::get_error;
+my $selectchar_w = $selectchar->w;
+my $selectchar_h = $selectchar->h;
+my $selectchar_srcrect = SDL::Rect->new(0,0,$selectchar_w,$selectchar_h);
 
 sub BUILDARGS {
     my ($self, %args) = @_;
@@ -53,6 +63,10 @@ sub render {
     $srcrect = SDL::Rect->new(0,0,$texto_w,$texto_h);
     $dstrect = SDL::Rect->new($surface->w/2-$texto_w/2,$surface->h/2-$texto_h/2,$texto_w,$texto_h);
     SDL::Video::blit_surface($texto, $srcrect, $surface->surface, $dstrect);
+
+    $dstrect = SDL::Rect->new(30,$surface->h - $selectchar_h - 30,$selectchar_w,$selectchar_h);
+    SDL::Video::blit_surface($selectchar, $selectchar_srcrect, $surface->surface, $dstrect);
+
 }
 
 __PACKAGE__->meta->make_immutable();
