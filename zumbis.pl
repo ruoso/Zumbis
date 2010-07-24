@@ -192,7 +192,7 @@ sub eventos_gameover {
 
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
-        if ($tecla == SDLK_SPACE) {
+        if ($tecla == SDLK_RETURN) {
             @zumbis = ();
             @morrendo = ();
             @tiros = ();
