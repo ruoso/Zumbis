@@ -64,7 +64,7 @@ sub render {
     $dstrect = SDL::Rect->new($surface->w/2-$texto_w/2,$surface->h/2-$texto_h/2,$texto_w,$texto_h);
     SDL::Video::blit_surface($texto, $srcrect, $surface->surface, $dstrect);
 
-    $dstrect = SDL::Rect->new(30,$surface->h - $selectchar_h - 30,$selectchar_w,$selectchar_h);
+    $dstrect = SDL::Rect->new(40,$surface->h - $selectchar_h - 60,$selectchar_w,$selectchar_h);
     SDL::Video::blit_surface($selectchar, $selectchar_srcrect, $surface->surface, $dstrect);
 
 }

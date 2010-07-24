@@ -6,14 +6,21 @@ use constant MAP_NS => 'http://perl.org.br/games/zumbis';
 my $map_schema = XML::Compile::Schema->new('mapa.xsd');
 my $map_reader = $map_schema->compile(READER => pack_type(MAP_NS, 'mapa'),
                                       sloppy_integers => 1, sloppy_floats => 1);
+
+use SDL::TTF;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
 
+SDL::TTF::init;
 has arquivo => (is => 'ro', isa => 'Str', required => 1);
 has dados => (is => 'ro', isa => 'HashRef' );
 has colisao => (is => 'ro', isa => 'ArrayRef');
 has tileset => (is => 'ro');
+
+my $font_p = SDL::TTF::open_font('dados/AtariSmall.ttf', 16) or
+  die 'Erro carregando a fonte';
+my $color = SDL::Color->new(0,0,0);
 
 sub BUILDARGS {
     my ($self, %args) = @_;
@@ -71,7 +78,7 @@ sub tilesize {
 }
 
 sub render {
-    my ($self, $surface) = @_;
+    my ($self, $surface, $tempo) = @_;
     my $tilesize = $self->dados->{tilesize};
     my $tileset  = $self->tileset;
 
@@ -96,6 +103,17 @@ sub render {
         SDL::Video::blit_surface( $tileset, $src_rect,
                                   $surface, $dst_rect );
     }
+
+
+    my $timer =
+      SDL::TTF::render_text_blended
+          ($font_p, $tempo, $color)
+            or die 'TTF render error: ' . SDL::get_error;
+    my $timer_w = $timer->w;
+    my $timer_h = $timer->h;
+    my $timer_srcrect = SDL::Rect->new(0,0,$timer_w,$timer_h);
+    my $dstrect = SDL::Rect->new(40,$surface->h - $timer_h - 30,$timer_w,$timer_h);
+    SDL::Video::blit_surface($timer, $timer_srcrect, $surface, $dstrect);
 
 };
 

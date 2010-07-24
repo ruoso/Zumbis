@@ -189,7 +189,8 @@ sub move_heroi {
 sub move_zumbis { $_->tick($_[0], $mapa, $player_x, $player_y) for @zumbis }
 
 sub exibicao {
-    $mapa->render( $tela->surface );
+    my $result = (SDL::get_ticks() - $initial_ticks )/1000;
+    $mapa->render( $tela->surface, $result );
     $_->render($tela->surface) for @morrendo;
     $_->render($tela->surface) for @tiros;
     $_->render($tela->surface) for @zumbis;
