@@ -164,7 +164,7 @@ sub move_heroi {
                             (abs($t->{x} - 10 - $z->{x})<20 &&
                              abs($t->{y} - $z->{y})<20):
                             (abs($t->{x} - $z->{x})<20 &&
-                             abs($t->{y} - $z->{y}-10)<10)))?
+                             abs($t->{y} - 25 - $z->{y})<25)))?
                            ($z->sequence($z->sequence!~/morrendo/?'morrendo_'.$z->sequence:()),
                             push(@morrendo,$z),
                             $t->collided(1)
@@ -179,10 +179,12 @@ sub move_heroi {
     $change_y = 0 - $player_vel * $dt if $sequencia eq 'cima';
     $change_y = $player_vel * $dt if $sequencia eq 'baixo';
 
-    my $tilex = int(($player_x + $change_x + 15) / $tilesize);
-    my $tiley = int(($player_y + $change_y + 15) / $tilesize);
-
-    unless ($mapa->colisao->[$tilex][$tiley]) {
+    my $start_tilex = ($player_x + $change_x) / $tilesize;
+    my $start_tiley = ($player_y + $change_y) / $tilesize;
+    my $end_tilex = ($player_x + 32 + $change_x) / $tilesize;
+    my $end_tiley = ($player_y + 32 + $change_y) / $tilesize;
+    if (!$mapa->colisao->[$start_tilex][$start_tiley] &&
+        !$mapa->colisao->[$end_tilex][$end_tiley]) {
         $player_x += $change_x;
         $player_y += $change_y;
     }
