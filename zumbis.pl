@@ -176,7 +176,7 @@ sub move_heroi {
     $change_y = $player_vel * $dt if $sequencia eq 'baixo';
 
     my $tilex = int(($player_x + $change_x + 15) / $tilesize);
-    my $tiley = int(($player_y + $change_y + 35) / $tilesize);
+    my $tiley = int(($player_y + $change_y + 15) / $tilesize);
 
     unless ($mapa->colisao->[$tilex][$tiley]) {
         $player_x += $change_x;
