@@ -15,6 +15,7 @@ use Zumbis::Mapa;
 use Zumbis::Tiro;
 use Zumbis::Zumbi;
 use Zumbis::TelaGameOver;
+use Zumbis::Audio;
 
 my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
 my $initial_ticks;
@@ -52,6 +53,9 @@ my $tela = SDLx::Surface::display(
     width => $mapa->width_px,
     height => $mapa->height_px
 );
+
+Zumbis::Audio->init;
+Zumbis::Audio->start_music('dados/terrortrack.ogg');
 
 my %pressed;
 sub eventos {
