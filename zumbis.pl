@@ -268,4 +268,5 @@ $jogo = SDLx::Controller->new(dt => 0.3);
 init_game();
 $jogo->run;
 
+SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
 
