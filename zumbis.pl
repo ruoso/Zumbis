@@ -7,7 +7,6 @@ use SDL::Time;
 use SDL::Rect;
 use SDL::Event;
 use SDL::Events;
-use SDLx::Sprite;
 use SDLx::Sprite::Animated;
 use SDLx::Surface;
 use SDLx::Controller;
