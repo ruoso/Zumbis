@@ -27,7 +27,7 @@ my $heroi = SDLx::Sprite::Animated->new(
 );
 my $heroina = SDLx::Sprite::Animated->new(
     image => 'dados/heroina.png',
-    rect  => SDL::Rect->new(5,14,32,45),
+    rect  => SDL::Rect->new(5,14,31,45),
     ticks_per_frame => 2,
 );
 
