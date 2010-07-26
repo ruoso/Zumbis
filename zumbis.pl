@@ -64,7 +64,7 @@ $player->start;
 my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
     height => $mapa->height_px,
-    flags => SDL_FULLSCREEN,
+    flags => SDL_FULLSCREEN | SDL_HWSURFACE | SDL_DOUBLEBUF,
 );
 
 Zumbis::Audio->init;
@@ -205,7 +205,8 @@ sub exibicao {
     $_->render($tela->surface) for @tiros;
     $_->render($tela->surface) for @zumbis;
     $player->draw_xy( $tela->surface, $player_x, $player_y );
-    $tela->update;
+#    $tela->update;
+    $tela->flip;
     return $result;
 }
 
