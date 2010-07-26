@@ -22,6 +22,10 @@ has dt => (is => 'rw', default => 0 );
 sub set_new_dt { (500 + rand 10) }
 
 my $imagem_zumbi = SDL::Image::load('dados/zumbi.png');
+my $rect_zumbi = SDL::Rect->new(SPRITE_NUM_COLS,
+                                SPRITE_NUM_ROWS,
+                                SPRITE_WIDTH,
+                                SPRITE_HEIGHT);
 
 sub BUILDARGS {
     my ($self, %args) = @_;
@@ -29,10 +33,7 @@ sub BUILDARGS {
     my $z = SDLx::Sprite::Animated->new
       ( #image => SPRITE_IMAGE,
         surface => $imagem_zumbi,
-        rect  => SDL::Rect->new(SPRITE_NUM_COLS,
-                                SPRITE_NUM_ROWS,
-                                SPRITE_WIDTH,
-                                SPRITE_HEIGHT),
+        rect  => $rect_zumbi,
         ticks_per_frame => SPRITE_TPS,
       );
 
