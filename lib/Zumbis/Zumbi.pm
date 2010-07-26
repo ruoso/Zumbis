@@ -4,7 +4,6 @@ use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
 
-use constant SPRITE_IMAGE => 'dados/zumbi.png';
 use constant SPRITE_NUM_COLS => 3;
 use constant SPRITE_NUM_ROWS => 4;
 use constant SPRITE_WIDTH => 32;
@@ -13,21 +12,23 @@ use constant SPRITE_TPS => 2;
 
 has x => (is => 'rw', required => 1);
 has y => (is => 'rw', required => 1);
-has sprite => (is => 'ro', isa => 'SDLx::Sprite::Animated',
-               handles => ['sequence']);
-has tx => (is => 'rw', isa => 'Int');
-has ty => (is => 'rw', isa => 'Int');
+has sprite => (is => 'ro', handles => ['sequence']);
+has tx => (is => 'rw');
+has ty => (is => 'rw');
 has vel => (is => 'rw', default => 0.3);
 has change_dt => (is => 'rw', default => \&set_new_dt  );
 has dt => (is => 'rw', default => 0 );
 
 sub set_new_dt { (500 + rand 10) }
 
+my $imagem_zumbi = SDL::Image::load('dados/zumbi.png');
+
 sub BUILDARGS {
     my ($self, %args) = @_;
 
     my $z = SDLx::Sprite::Animated->new
-      ( image => SPRITE_IMAGE,
+      ( #image => SPRITE_IMAGE,
+        surface => $imagem_zumbi,
         rect  => SDL::Rect->new(SPRITE_NUM_COLS,
                                 SPRITE_NUM_ROWS,
                                 SPRITE_WIDTH,
