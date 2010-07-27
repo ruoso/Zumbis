@@ -13,7 +13,7 @@ use SDLx::Controller;
 
 use File::Spec::Functions;
 use FindBin;
-use lib catfile($FindBin::Bin,'lib');
+use lib catfile($FindBin::Bin,'..','lib');
 use Games::Zumbis;
 use Games::Zumbis::Mapa;
 use Games::Zumbis::Tiro;
