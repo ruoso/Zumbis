@@ -86,5 +86,5 @@ that lists each source and specific license.
 =head1 CONTRIBUTIONS
 
 You may take a look at http://github.com/ruoso/Zumbis, you can go to
-L<<irc://irc.perl.org/sdl>> and talk to the developers, we are very permissive
+L<irc://irc.perl.org/sdl> and talk to the developers, we are very permissive
 in granting push rights.
