@@ -1,8 +1,9 @@
-package Zumbis::Zumbi;
+package Games::Zumbis::Zumbi;
 use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
+use Games::Zumbis;
 
 use constant SPRITE_NUM_COLS => 3;
 use constant SPRITE_NUM_ROWS => 4;
@@ -21,7 +22,7 @@ has dt => (is => 'rw', default => 0 );
 
 sub set_new_dt { (500 + rand 10) }
 
-my $imagem_zumbi = SDL::Image::load('dados/zumbi.png');
+my $imagem_zumbi = SDL::Image::load( Games::Zumbis->sharedir->file('dados/zumbi.png') );
 my $rect_zumbi = SDL::Rect->new(SPRITE_NUM_COLS,
                                 SPRITE_NUM_ROWS,
                                 SPRITE_WIDTH,

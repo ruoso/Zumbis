@@ -1,4 +1,4 @@
-package Zumbis::Audio;
+package Games::Zumbis::Audio;
 
 use strict;
 use warnings;

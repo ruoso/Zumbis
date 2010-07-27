@@ -1,10 +1,11 @@
-package Zumbis::Tiro;
+package Games::Zumbis::Tiro;
 use 5.10.0;
 use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
-use Zumbis::Audio;
+use Games::Zumbis::Audio;
+use Games::Zumbis;
 
 has x => (is => 'rw');
 has y => (is => 'rw');
@@ -12,14 +13,14 @@ has vel => (is => 'rw', default => 0.8);
 has type => (is => 'rw');
 has collided => (is => 'rw', default => 0);
 has sound => ( is => 'ro',
-               default => sub { Zumbis::Audio->load_sound('dados/shot.ogg') }
+               default => sub { Games::Zumbis::Audio->load_sound( Games::Zumbis->sharedir->file('dados/shot.ogg')) }
              );
 
 sub BUILD {
-    Zumbis::Audio->play( shift->sound );
+    Games::Zumbis::Audio->play( shift->sound );
 }
 
-my $sprites = SDL::Image::load('dados/bullet.png');
+my $sprites = SDL::Image::load( Games::Zumbis->sharedir->file('dados/bullet.png'));
 my %rects =
   ( rtl => SDL::Rect->new(0, 0, 20, 10),
     ltr => SDL::Rect->new(0, 10, 20, 10),

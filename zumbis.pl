@@ -10,23 +10,24 @@ use SDL::Events;
 use SDLx::Sprite::Animated;
 use SDLx::Surface;
 use SDLx::Controller;
-use Zumbis::Mapa;
-use Zumbis::Tiro;
-use Zumbis::Zumbi;
-use Zumbis::TelaGameOver;
-use Zumbis::Audio;
+use Games::Zumbis::Mapa;
+use Games::Zumbis::Tiro;
+use Games::Zumbis::Zumbi;
+use Games::Zumbis::TelaGameOver;
+use Games::Zumbis::Audio;
+use Games::Zumbis;
 
-my $mapa = Zumbis::Mapa->new( arquivo => 'mapas/mapa-de-teste-1.xml' );
+my $mapa = Games::Zumbis::Mapa->new( arquivo => Games::Zumbis->sharedir->file('mapas/mapa-de-teste-1.xml') );
 my $initial_ticks;
 my $score = 0;
 
 my $heroi = SDLx::Sprite::Animated->new(
-    image => 'dados/heroi.png',
+    image => Games::Zumbis->sharedir->file('dados/heroi.png'),
     rect  => SDL::Rect->new(5,14,32,45),
     ticks_per_frame => 2,
 );
 my $heroina = SDLx::Sprite::Animated->new(
-    image => 'dados/heroina.png',
+    image => Games::Zumbis->sharedir->file('dados/heroina.png'),
     rect  => SDL::Rect->new(5,14,31,45),
     ticks_per_frame => 2,
 );
@@ -67,8 +68,8 @@ my $tela = SDLx::Surface::display(
     flags => SDL_FULLSCREEN | SDL_HWSURFACE | SDL_DOUBLEBUF,
 );
 
-Zumbis::Audio->init;
-Zumbis::Audio->start_music('dados/terrortrack.ogg');
+Games::Zumbis::Audio->init;
+Games::Zumbis::Audio->start_music( Games::Zumbis->sharedir->file('dados/terrortrack.ogg'));
 
 my %pressed;
 sub eventos {
@@ -98,8 +99,8 @@ sub eventos {
                 when (/baixo/)    { $type = 'tpd' };
                 when (/cima/)     { $type = 'btu' };
             };
-            push @tiros, Zumbis::Tiro->new(x => $player_x, y => $player_y+20,
-                                           type => $type);
+            push @tiros, Games::Zumbis::Tiro->new(x => $player_x, y => $player_y+20,
+                                            type => $type);
         }
         if (%pressed) {
             $player->sequence((keys %pressed)[0]);
@@ -136,7 +137,7 @@ sub cria_zumbis {
     $last_zumbi_dt += $dt;
     if ($last_zumbi_dt > 500 && scalar @zumbis < 5) {
         my ($x, $y) = $mapa->next_spawnpoint_px;
-        push @zumbis, Zumbis::Zumbi->new(x => $x, y => $y);
+        push @zumbis, Games::Zumbis::Zumbi->new(x => $x, y => $y);
         $last_zumbi_dt = 0;
     }
 }
@@ -256,7 +257,7 @@ sub init_game_over {
     %pressed = ();
     $jogo->remove_all_handlers;
     my $result = exibicao();
-    $telagameover = Zumbis::TelaGameOver->new(surface => $tela,
+    $telagameover = Games::Zumbis::TelaGameOver->new(surface => $tela,
                                               tempo => $result,
                                               score => $score );
     $tela->update();

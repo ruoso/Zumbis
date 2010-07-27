@@ -1,10 +1,11 @@
-package Zumbis::TelaGameOver;
+package Games::Zumbis::TelaGameOver;
 use Mouse;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
 use SDLx::Surface;
 use SDL::TTF;
+use Games::Zumbis;
 use utf8;
 
 has tempo => (is => 'ro', required => 1);
@@ -12,12 +13,12 @@ has ultimo_frame => (is => 'ro', required => 1);
 has texto => (is => 'ro', required => 1);
 has texto_sc => (is => 'ro', required => 1);
 
-my $image = SDLx::Surface->new(surface => SDL::Image::load('dados/gameover.png'));
+my $image = SDLx::Surface->new(surface => SDL::Image::load( Games::Zumbis->sharedir->file('dados/gameover.png') ));
 
 SDL::TTF::init;
-my $font = SDL::TTF::open_font('dados/AtariSmall.ttf', 30) or
+my $font = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 30) or
   die 'Erro carregando a fonte';
-my $font_p = SDL::TTF::open_font('dados/AtariSmall.ttf', 16) or
+my $font_p = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 16) or
   die 'Erro carregando a fonte';
 my $color = SDL::Color->new(0,0,0);
 

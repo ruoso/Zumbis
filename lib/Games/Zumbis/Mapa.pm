@@ -1,9 +1,10 @@
-package Zumbis::Mapa;
+package Games::Zumbis::Mapa;
 use Mouse;
+use Games::Zumbis;
 use XML::Compile::Schema;
 use XML::Compile::Util qw(pack_type);
 use constant MAP_NS => 'http://perl.org.br/games/zumbis';
-my $map_schema = XML::Compile::Schema->new('mapa.xsd');
+my $map_schema = XML::Compile::Schema->new( Games::Zumbis->sharedir->file('mapa.xsd') );
 my $map_reader = $map_schema->compile(READER => pack_type(MAP_NS, 'mapa'),
                                       sloppy_integers => 1, sloppy_floats => 1);
 
@@ -11,14 +12,15 @@ use SDL::TTF;
 use SDL::Rect;
 use SDL::Image;
 use SDL::Video;
+use Carp ();
 
 SDL::TTF::init;
-has arquivo => (is => 'ro', isa => 'Str', required => 1);
+has arquivo => (is => 'ro', isa => 'Path::Class::File', required => 1);
 has dados => (is => 'ro', isa => 'HashRef' );
 has colisao => (is => 'ro', isa => 'ArrayRef');
 has tileset => (is => 'ro');
 
-my $font_p = SDL::TTF::open_font('dados/AtariSmall.ttf', 16) or
+my $font_p = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 16) or
   die 'Erro carregando a fonte';
 my $color = SDL::Color->new(0,0,0);
 
@@ -36,7 +38,11 @@ sub BUILDARGS {
         $args{colisao}[$x][$y] = 1 if $object->{collide};
     }
 
-    $args{tileset} = SDL::Image::load($args{dados}{tileset});
+    my $tileset_filename = Games::Zumbis->sharedir->file( $args{dados}{tileset} );
+    Carp::croak "tileset '$tileset_filename' não encontrado\n"
+        unless -f $tileset_filename;
+
+    $args{tileset} = SDL::Image::load( $tileset_filename );
 
     return \%args;
 };
