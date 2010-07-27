@@ -6,7 +6,6 @@ use File::ShareDir ();
 use Path::Class    ();
 use FindBin        ();
 
-our $VERSION = 0.01;
 my $sharedir;
 
 sub sharedir {
