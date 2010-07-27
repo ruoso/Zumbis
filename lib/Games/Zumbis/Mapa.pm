@@ -114,7 +114,7 @@ sub render {
     my $timer =
       SDL::TTF::render_text_blended
           ($font_p, "Mortes: $score. $tempo segundos", $color)
-            or die 'TTF render error: ' . SDL::get_error;
+            or die 'TTF render error: ' . SDL::get_error();
     my $timer_w = $timer->w;
     my $timer_h = $timer->h;
     my $timer_srcrect = SDL::Rect->new(0,0,$timer_w,$timer_h);

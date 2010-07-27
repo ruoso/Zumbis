@@ -25,7 +25,7 @@ my $color = SDL::Color->new(0,0,0);
 my $selectchar =
   SDL::TTF::render_text_blended
   ($font_p, "Aperte 1 para Heroi, 2 para Heroina ou enter para continuar!", $color)
-  or die 'TTF render error: ' . SDL::get_error;
+  or die 'TTF render error: ' . SDL::get_error();
 my $selectchar_w = $selectchar->w;
 my $selectchar_h = $selectchar->h;
 my $selectchar_srcrect = SDL::Rect->new(0,0,$selectchar_w,$selectchar_h);
@@ -43,9 +43,9 @@ sub BUILDARGS {
     $surface->blit($ultimo_frame, $rect1, $rect2);
 
     my $texto = SDL::TTF::render_text_blended($font, "Voce sobreviveu por ".$args{tempo}." segundos!", $color)
-      or die 'TTF render error: ' . SDL::get_error;
+      or die 'TTF render error: ' . SDL::get_error();
     my $texto_sc = SDL::TTF::render_text_blended($font, "E matou ".$args{score}." zumbi".($args{score}!=1?"s":'')."!", $color)
-      or die 'TTF render error: ' . SDL::get_error;
+      or die 'TTF render error: ' . SDL::get_error();
 
     $args{ultimo_frame} = $ultimo_frame;
     $args{texto} = $texto;
