@@ -10,12 +10,16 @@ use SDL::Events;
 use SDLx::Sprite::Animated;
 use SDLx::Surface;
 use SDLx::Controller;
+
+use File::Spec::Functions;
+use FindBin;
+use lib catfile($FindBin::Bin,'lib');
+use Games::Zumbis;
 use Games::Zumbis::Mapa;
 use Games::Zumbis::Tiro;
 use Games::Zumbis::Zumbi;
 use Games::Zumbis::TelaGameOver;
 use Games::Zumbis::Audio;
-use Games::Zumbis;
 
 my $mapa = Games::Zumbis::Mapa->new( arquivo => Games::Zumbis->sharedir->file('mapas/mapa-de-teste-1.xml') );
 my $initial_ticks;
