@@ -37,7 +37,7 @@ Games::Zumbis - How long can you survive in a zombies attack
 =head1 SYNOPSIS
 
   # install the game and its prereqs
-  cpan Games::Zumibis
+  cpan Games::Zumbis
 
   # run the game
   zumbis
