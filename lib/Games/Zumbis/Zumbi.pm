@@ -11,6 +11,12 @@ use constant SPRITE_WIDTH => 32;
 use constant SPRITE_HEIGHT => 45;
 use constant SPRITE_TPS => 2;
 
+my $imagem_zumbi = SDL::Image::load( Games::Zumbis->sharedir->file('dados/zumbi.png') );
+my $rect_zumbi = SDL::Rect->new(SPRITE_NUM_COLS,
+                                SPRITE_NUM_ROWS,
+                                SPRITE_WIDTH,
+                                SPRITE_HEIGHT);
+
 has x => (is => 'rw', required => 1);
 has y => (is => 'rw', required => 1);
 has sprite => (is => 'ro', handles => ['sequence']);
@@ -24,12 +30,6 @@ sub set_new_dt { (500 + rand 10) }
 
 sub BUILDARGS {
     my ($self, %args) = @_;
-
-    my $imagem_zumbi = SDL::Image::load( Games::Zumbis->sharedir->file('dados/zumbi.png') );
-    my $rect_zumbi = SDL::Rect->new(SPRITE_NUM_COLS,
-                                    SPRITE_NUM_ROWS,
-                                    SPRITE_WIDTH,
-                                    SPRITE_HEIGHT);
 
     my $z = SDLx::Sprite::Animated->new
       ( surface => $imagem_zumbi,
