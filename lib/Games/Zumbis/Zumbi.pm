@@ -147,7 +147,7 @@ sub rect {
 
 sub render {
     my ($self, $surface) = @_;
-    $self->sprite->stop if $self->sequence =~ /morrendo/ && $self->sprite->{current_frame} == 5;
+    $self->sprite->stop if $self->sequence =~ /morrendo/ && $self->sprite->current_frame == 5;
     $self->sprite->draw_xy( $surface, $self->x, $self->y );
 }
 
