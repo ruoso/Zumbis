@@ -22,42 +22,39 @@ has dt => (is => 'rw', default => 0 );
 
 sub set_new_dt { (500 + rand 10) }
 
-my $imagem_zumbi = SDL::Image::load( Games::Zumbis->sharedir->file('dados/zumbi.png') );
-my $rect_zumbi = SDL::Rect->new(SPRITE_NUM_COLS,
-                                SPRITE_NUM_ROWS,
-                                SPRITE_WIDTH,
-                                SPRITE_HEIGHT);
-
 sub BUILDARGS {
     my ($self, %args) = @_;
 
+    my $imagem_zumbi = SDL::Image::load( Games::Zumbis->sharedir->file('dados/zumbi.png') );
+    my $rect_zumbi = SDL::Rect->new(SPRITE_NUM_COLS,
+                                    SPRITE_NUM_ROWS,
+                                    SPRITE_WIDTH,
+                                    SPRITE_HEIGHT);
+
     my $z = SDLx::Sprite::Animated->new
-      ( #image => SPRITE_IMAGE,
-        surface => $imagem_zumbi,
+      ( surface => $imagem_zumbi,
         rect  => $rect_zumbi,
         ticks_per_frame => SPRITE_TPS,
-      );
+        sequence => 'parado_baixo',
+        sequences =>
+        { parado_esquerda   => [ [1, 3] ],
+          parado_direita    => [ [1, 1] ],
+          parado_cima       => [ [1, 0] ],
+          parado_baixo      => [ [1, 2] ],
+          esquerda          => [ [0,3], [1,3], [2,3] ],
+          direita           => [ [0,1], [1,1], [2,1] ],
+          cima              => [ [0,0], [1,0], [2,0] ],
+          baixo             => [ [0,2], [1,2], [2,2] ],
+          morrendo_cima     => [ [0,4], [1,4], [2,4], [0,8], [1,8], [2,8] ],
+          morrendo_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
+          morrendo_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
+          morrendo_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
+          morrendo_parado_cima     => [ [0,4], [1,4], [2,4], [0,8], [1,8], [2,8] ],
+          morrendo_parado_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
+          morrendo_parado_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
+          morrendo_parado_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
+        });
 
-    $z->set_sequences
-      ( parado_esquerda   => [ [1, 3] ],
-        parado_direita    => [ [1, 1] ],
-        parado_cima       => [ [1, 0] ],
-        parado_baixo      => [ [1, 2] ],
-        esquerda          => [ [0,3], [1,3], [2,3] ],
-        direita           => [ [0,1], [1,1], [2,1] ],
-        cima              => [ [0,0], [1,0], [2,0] ],
-        baixo             => [ [0,2], [1,2], [2,2] ],
-        morrendo_cima     => [ [0,4], [1,4], [2,4], [0,8], [1,8], [2,8] ],
-        morrendo_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
-        morrendo_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
-        morrendo_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
-        morrendo_parado_cima     => [ [0,4], [1,4], [2,4], [0,8], [1,8], [2,8] ],
-        morrendo_parado_direita  => [ [0,5], [1,5], [2,5], [0,8], [1,8], [2,8] ],
-        morrendo_parado_baixo    => [ [0,6], [1,6], [2,6], [0,8], [1,8], [2,8] ],
-        morrendo_parado_esquerda => [ [0,7], [1,7], [2,7], [0,8], [1,8], [2,8] ],
-      );
-
-    $z->sequence('parado_baixo');
     $z->start();
 
     return { %args, sprite => $z };
