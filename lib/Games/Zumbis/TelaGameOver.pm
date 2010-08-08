@@ -15,7 +15,7 @@ has texto_sc => (is => 'ro', required => 1);
 
 my $image = SDLx::Surface->new(surface => SDL::Image::load( Games::Zumbis->sharedir->file('dados/gameover.png') ));
 
-SDL::TTF::init;
+SDL::TTF::init();
 my $font = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 30) or
   die 'Erro carregando a fonte';
 my $font_p = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 16) or
