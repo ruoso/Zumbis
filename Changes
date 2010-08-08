@@ -2,6 +2,9 @@ Revision history for Games-Zumbis.
 
 {{$NEXT}}
 
+0.02      2010-08-02 22:39:19 America/Sao_Paulo
+ - updated to latest API changes of the new SDL Perl
+
 0.01      2010-07-27 15:33:16 America/Sao_Paulo
 
  - initial release.
