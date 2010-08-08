@@ -29,6 +29,10 @@ Brainstorm:
 
  * O mapa diz, por spawn point, o estado inicial do zumbi;
 
+ * Desenvolver uma nova Tela de Game Over, com um Zumbi na mesma;
+
+ * Dar ao jogador uma bomba de som para que ele possa matar todos os zumbis na tela através de uma alta frequência;
+
 Tileset:
 
  *  http://silveiraneto.net/tag/pixelart
