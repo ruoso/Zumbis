@@ -69,7 +69,7 @@ $player->start;
 my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
     height => $mapa->height_px,
-    flags => SDL_FULLSCREEN | SDL_HWSURFACE | SDL_DOUBLEBUF,
+    flags => SDL_HWSURFACE | SDL_DOUBLEBUF,
 );
 
 Games::Zumbis::Audio->init;
@@ -78,9 +78,9 @@ Games::Zumbis::Audio->start_music( Games::Zumbis->sharedir->file('dados/terrortr
 my %pressed;
 sub eventos {
     my $e = shift;
-    my $jogo = shift;
-    $jogo->stop if $e->type == SDL_QUIT;
-    $jogo->stop if $e->key_sym == SDLK_ESCAPE;
+    #my $jogo = shift;
+    $jogo->quit if $e->type == SDL_QUIT;
+    $jogo->quit if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
@@ -274,6 +274,5 @@ sub init_game_over {
 $jogo = SDLx::Controller->new(dt => 0.003);
 init_game();
 $jogo->run;
-
-SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
+#SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
 
