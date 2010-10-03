@@ -69,7 +69,7 @@ $player->start;
 my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
     height => $mapa->height_px,
-    flags => SDL_HWSURFACE | SDL_DOUBLEBUF,
+    flags => SDL_FULLSCREEN | SDL_HWSURFACE | SDL_DOUBLEBUF,
 );
 
 Games::Zumbis::Audio->init;
@@ -274,5 +274,5 @@ sub init_game_over {
 $jogo = SDLx::Controller->new(dt => 0.003);
 init_game();
 $jogo->run;
-#SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
+SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
 
