@@ -79,8 +79,8 @@ my %pressed;
 sub eventos {
     my $e = shift;
     #my $jogo = shift;
-    $jogo->quit if $e->type == SDL_QUIT;
-    $jogo->quit if $e->key_sym == SDLK_ESCAPE;
+    $jogo->stop if $e->type == SDL_QUIT;
+    $jogo->stop if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
