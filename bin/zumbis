@@ -62,7 +62,7 @@ $heroina->set_sequences(%$sequences);
 my ( $player_x, $player_y ) = $mapa->playerstart_px;
 #$player->x( $player_x );
 #$player->y( $player_y );
-my $player_vel = 0.25;
+my $player_vel = 0.75;
 $player->sequence('parado_baixo');
 $player->start;
 
@@ -78,8 +78,9 @@ Games::Zumbis::Audio->start_music( Games::Zumbis->sharedir->file('dados/terrortr
 my %pressed;
 sub eventos {
     my $e = shift;
-    return 0 if $e->type == SDL_QUIT;
-    return 0 if $e->key_sym == SDLK_ESCAPE;
+    my $jogo = shift;
+    $jogo->stop if $e->type == SDL_QUIT;
+    $jogo->stop if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
@@ -270,7 +271,7 @@ sub init_game_over {
     $jogo->add_show_handler( \&render_gameover );
 }
 
-$jogo = SDLx::Controller->new(dt => 0.3);
+$jogo = SDLx::Controller->new(dt => 0.003);
 init_game();
 $jogo->run;
 
