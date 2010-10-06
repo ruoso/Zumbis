@@ -66,10 +66,13 @@ my $player_vel = 0.75;
 $player->sequence('parado_baixo');
 $player->start;
 
+my $flags = SDL_HWSURFACE | SDL_DOUBLEBUF;
+   $flags = $flags | SDL_FULLSCREEN  unless $ARGV[0];
+
 my $tela = SDLx::Surface::display( 
     width => $mapa->width_px,
     height => $mapa->height_px,
-    flags => SDL_FULLSCREEN | SDL_HWSURFACE | SDL_DOUBLEBUF,
+    flags =>  $flags,
 );
 
 Games::Zumbis::Audio->init;
@@ -78,7 +81,7 @@ Games::Zumbis::Audio->start_music( Games::Zumbis->sharedir->file('dados/terrortr
 my %pressed;
 sub eventos {
     my $e = shift;
-    #my $jogo = shift;
+    my $jogo = shift;
     $jogo->stop if $e->type == SDL_QUIT;
     $jogo->stop if $e->key_sym == SDLK_ESCAPE;
 
@@ -274,5 +277,4 @@ sub init_game_over {
 $jogo = SDLx::Controller->new(dt => 0.003);
 init_game();
 $jogo->run;
-SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
-
+SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() ) unless $ARGV[0];
