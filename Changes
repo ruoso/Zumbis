@@ -2,6 +2,9 @@ Revision history for Games-Zumbis.
 
 {{$NEXT}}
 
+ - updated to latest API changes of the new SDL Perl (kthakore)
+ - full screen is now optional (kthakore)
+
 0.02      2010-08-02 22:39:19 America/Sao_Paulo
  - updated to latest API changes of the new SDL Perl
 
