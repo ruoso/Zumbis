@@ -2,8 +2,14 @@ Revision history for Games-Zumbis.
 
 {{$NEXT}}
 
+ - faster game pace, and moar zombies! (garu)
+
+0.03      2010-10-09 02:50:46 America/Sao_Paulo
+
  - updated to latest API changes of the new SDL Perl (kthakore)
- - full screen is now optional (kthakore)
+ - full screen is now optional (kthakore, garu)
+ - 'f' key toggles fullscreen during the game (garu)
+ - basic usage with --help option (garu)
 
 0.02      2010-08-02 22:39:19 America/Sao_Paulo
  - updated to latest API changes of the new SDL Perl

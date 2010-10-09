@@ -73,7 +73,7 @@ $heroina->set_sequences(%$sequences);
 my ( $player_x, $player_y ) = $mapa->playerstart_px;
 #$player->x( $player_x );
 #$player->y( $player_y );
-my $player_vel = 0.75;
+my $player_vel = 0.45;
 $player->sequence('parado_baixo');
 $player->start;
 
@@ -158,7 +158,7 @@ my $last_zumbi_dt = 0;
 sub cria_zumbis {
     my $dt = shift;
     $last_zumbi_dt += $dt;
-    if ($last_zumbi_dt > 500 && scalar @zumbis < 5) {
+    if ($last_zumbi_dt > 400 && scalar @zumbis < 7) {
         my ($x, $y) = $mapa->next_spawnpoint_px;
         push @zumbis, Games::Zumbis::Zumbi->new(x => $x, y => $y);
         $last_zumbi_dt = 0;
