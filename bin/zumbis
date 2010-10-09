@@ -121,6 +121,10 @@ sub eventos {
     }
     elsif ( $e->type == SDL_KEYUP ) {
         my $tecla = $e->key_sym;
+        if ($tecla == SDLK_f) {
+            SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() );
+            $fullscreen = not $fullscreen;
+        }
         if ($tecla == SDLK_LEFT) {
             delete $pressed{esquerda};
             $player->sequence('parado_esquerda')  unless %pressed;
