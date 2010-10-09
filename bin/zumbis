@@ -22,9 +22,15 @@ use Games::Zumbis::TelaGameOver;
 use Games::Zumbis::Audio;
 
 use Getopt::Long;
+use Pod::Usage;
 
+my $help       = 0;
 my $fullscreen = 0;
-GetOptions( 'fullscreen|fs=s' => \$fullscreen );
+GetOptions( 'fullscreen|fs=s' => \$fullscreen,
+            'help|?'          => \$help,
+          ) or pod2usage(1);
+pod2usage(2) if $help;
+
 
 my $mapa = Games::Zumbis::Mapa->new( arquivo => Games::Zumbis->sharedir->file('mapas/mapa-de-teste-1.xml') );
 my $initial_ticks;
@@ -289,3 +295,33 @@ $jogo->run;
 
 # end of game, restore screen (if set to full)
 SDL::Video::wm_toggle_fullscreen( SDL::Video::get_video_surface() ) if $fullscreen;
+
+__END__
+
+=head1 NAME
+
+zumbis - a fast-paced zombie apocalypse arcade game
+
+=head1 SYNOPSIS
+
+zumbis [options]
+
+Available options:
+
+    --fullscreen, --fs          enable full screen mode
+
+=head2 CONTROLS
+
+Use the arrow keys to control the character, and the spacebar to shoot;
+
+While in-game, you can press the 'f' key to toggle fullscreen mode, or
+the [escape] key to exit the game;
+
+Before restarting the game, press '1' to use a male character, or '2'
+for the female character. Pressing the [enter] key will restart the
+game with whatever character you've played before.
+
+For more information, please type 'perldoc Games::Zumbis' on the command
+line.
+
+Thanks for playing! And watch out for those flesh eating things! :)
