@@ -2,6 +2,10 @@ Revision history for Games-Zumbis.
 
 {{$NEXT}}
 
+ - oops, forgot to bump SDL minimal version (garu)
+
+0.04      2010-10-09 03:04:05 America/Sao_Paulo
+
  - faster game pace, and moar zombies! (garu)
 
 0.03      2010-10-09 02:50:46 America/Sao_Paulo
