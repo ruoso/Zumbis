@@ -12,8 +12,13 @@ has y => (is => 'rw');
 has vel => (is => 'rw', default => 0.8);
 has type => (is => 'rw');
 has collided => (is => 'rw', default => 0);
-has sound => ( is => 'ro',
-               default => sub { Games::Zumbis::Audio->load_sound( Games::Zumbis->sharedir->file('dados/shot.ogg')) }
+has sound => (
+               is      => 'ro',
+               default => sub {
+                   Games::Zumbis::Audio->load_sound(
+                        Games::Zumbis->sharedir->file('dados/shot.ogg')
+                   )
+               }
              );
 
 sub BUILD {
@@ -22,10 +27,10 @@ sub BUILD {
 
 my $sprites = SDL::Image::load( Games::Zumbis->sharedir->file('dados/bullet.png'));
 my %rects =
-  ( rtl => SDL::Rect->new(0, 0, 20, 10),
-    ltr => SDL::Rect->new(0, 10, 20, 10),
-    btu => SDL::Rect->new(0, 20, 10, 20),
-    tpd => SDL::Rect->new(10, 20, 10, 20),
+  ( left  => SDL::Rect->new(0, 0, 20, 10),
+    right => SDL::Rect->new(0, 10, 20, 10),
+    up    => SDL::Rect->new(0, 20, 10, 20),
+    down  => SDL::Rect->new(10, 20, 10, 20),
   );
 
 my $cache_colisao;
@@ -43,14 +48,15 @@ sub tick {
     my $tilesize = $cache_dados->{tilesize};
 
     my ($x, $y) = ($self->x, $self->y);
-    my ($o_t_x, $o_t_y) = map { int($_ / $tilesize) } $x, $y;
+    my ($o_t_x, $o_t_y) = map { int( $_ / $tilesize ) } $x, $y;
 
     my ($change_x, $change_y) = (0,0);
-    my $type = $self->type; my $vel = $self->vel;
-    if    ($type eq 'rtl') { $change_x = 0 - $vel * $dt }
-    elsif ($type eq 'ltr') { $change_x =     $vel * $dt }
-    elsif ($type eq 'btu') { $change_y = 0 - $vel * $dt }
-    elsif ($type eq 'tpd') { $change_y =     $vel * $dt }
+    my ($type, $vel) = ($self->type, $self->vel);
+    
+    if    ($type eq 'left')  { $change_x = 0 - $vel * $dt }
+    elsif ($type eq 'right') { $change_x =     $vel * $dt }
+    elsif ($type eq 'up')    { $change_y = 0 - $vel * $dt }
+    elsif ($type eq 'down')  { $change_y =     $vel * $dt }
 
     my ($tiles_x, $tiles_y) = map { int($_ / $tilesize) }
       ($change_x, $change_y);

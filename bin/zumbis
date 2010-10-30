@@ -57,14 +57,14 @@ my @morrendo;
 my @tiros;
 
 my $sequences = {
-    parado_esquerda => [ [1, 3] ],
-    parado_direita  => [ [1, 1] ],
-    parado_cima     => [ [1, 0] ],
-    parado_baixo    => [ [1, 2] ],
-    esquerda        => [ [0,3], [1,3], [2,3] ],
-    direita         => [ [0,1], [1,1], [2,1] ],
-    cima            => [ [0,0], [1,0], [2,0] ],
-    baixo           => [ [0,2], [1,2], [2,2] ],
+    stop_left  => [ [1, 3] ],
+    stop_right => [ [1, 1] ],
+    stop_up    => [ [1, 0] ],
+    stop_down  => [ [1, 2] ],
+    left       => [ [0,3], [1,3], [2,3] ],
+    right      => [ [0,1], [1,1], [2,1] ],
+    up         => [ [0,0], [1,0], [2,0] ],
+    down       => [ [0,2], [1,2], [2,2] ],
 };
 $heroi->set_sequences(%$sequences);
 $heroina->set_sequences(%$sequences);
@@ -74,7 +74,7 @@ my ( $player_x, $player_y ) = $mapa->playerstart_px;
 #$player->x( $player_x );
 #$player->y( $player_y );
 my $player_vel = 0.45;
-$player->sequence('parado_baixo');
+$player->sequence('stop_down');
 $player->start;
 
 my $flags = SDL_HWSURFACE | SDL_DOUBLEBUF;
@@ -99,25 +99,20 @@ sub eventos {
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
         if ($tecla == SDLK_LEFT) {
-            $pressed{esquerda} = 1;
+            $pressed{left} = 1;
         }
         elsif ($tecla == SDLK_RIGHT) {
-            $pressed{direita} = 1;
+            $pressed{right} = 1;
         }
         elsif ($tecla == SDLK_DOWN) {
-            $pressed{baixo} = 1;
+            $pressed{down} = 1;
         }
         elsif($tecla == SDLK_UP) {
-            $pressed{cima} = 1;
+            $pressed{up} = 1;
         }
         elsif ($tecla == SDLK_SPACE && scalar @tiros < 4) {
-            my $type;
-            given ($player->sequence) {
-                when (/esquerda/) { $type = 'rtl' };
-                when (/direita/)  { $type = 'ltr' };
-                when (/baixo/)    { $type = 'tpd' };
-                when (/cima/)     { $type = 'btu' };
-            };
+            my $type = $player->sequence;
+            $type =~ s/stop_//;
             push @tiros, Games::Zumbis::Tiro->new(x => $player_x, y => $player_y+20,
                                             type => $type);
         }
@@ -132,20 +127,20 @@ sub eventos {
             $fullscreen = not $fullscreen;
         }
         if ($tecla == SDLK_LEFT) {
-            delete $pressed{esquerda};
-            $player->sequence('parado_esquerda')  unless %pressed;
+            delete $pressed{left};
+            $player->sequence('stop_left')  unless %pressed;
         }
         elsif ($tecla == SDLK_RIGHT) {
-            delete $pressed{direita};
-            $player->sequence('parado_direita')  unless %pressed;;
+            delete $pressed{right};
+            $player->sequence('stop_right')  unless %pressed;;
         }
         elsif ($tecla == SDLK_DOWN) {
-            delete $pressed{baixo};
-            $player->sequence('parado_baixo')  unless %pressed;
+            delete $pressed{down};
+            $player->sequence('stop_down')  unless %pressed;
         }
         elsif ($tecla == SDLK_UP) {
-            delete $pressed{cima};
-            $player->sequence('parado_cima') unless %pressed;
+            delete $pressed{up};
+            $player->sequence('stop_up') unless %pressed;
         }
         if (%pressed) {
             $player->sequence((keys %pressed)[0]);
@@ -183,8 +178,8 @@ sub move_heroi {
                      !grep {
                          my $t = $_;
                          ((!$t->collided &&
-                           (($player->sequence =~ 'cima'
-                             || $player->sequence =~ 'baixo')?
+                           (($player->sequence =~ 'up'
+                             || $player->sequence =~ 'down')?
                             (abs($t->{x} - 10 - $z->{x})<20 &&
                              abs($t->{y} - $z->{y})<20):
                             (abs($t->{x} - $z->{x})<20 &&
@@ -199,10 +194,10 @@ sub move_heroi {
 
     my $sequencia = $player->sequence;
     my ($change_x, $change_y) = (0,0);
-    $change_x = 0 - $player_vel * $dt if $sequencia eq 'esquerda';
-    $change_x = $player_vel * $dt if $sequencia eq 'direita';
-    $change_y = 0 - $player_vel * $dt if $sequencia eq 'cima';
-    $change_y = $player_vel * $dt if $sequencia eq 'baixo';
+    $change_x = 0 - $player_vel * $dt if $sequencia eq 'left';
+    $change_x = $player_vel * $dt if $sequencia eq 'right';
+    $change_y = 0 - $player_vel * $dt if $sequencia eq 'up';
+    $change_y = $player_vel * $dt if $sequencia eq 'down';
 
     my $start_tilex = ($player_x + $change_x) / $tilesize;
     my $start_tiley = ($player_y + $change_y) / $tilesize;
@@ -253,7 +248,7 @@ sub eventos_gameover {
             @morrendo = ();
             @tiros = ();
             ( $player_x, $player_y ) = $mapa->playerstart_px;
-            $player->sequence('parado_baixo');
+            $player->sequence('stop_down');
             init_game();
         }
     }
