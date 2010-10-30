@@ -231,8 +231,8 @@ sub exibicao {
 
 sub eventos_gameover {
     my $e = shift;
-    return 0 if $e->type == SDL_QUIT;
-    return 0 if $e->key_sym == SDLK_ESCAPE;
+    $jogo->stop if $e->type    == SDL_QUIT;
+    $jogo->stop if $e->key_sym == SDLK_ESCAPE;
 
     if ( $e->type == SDL_KEYDOWN ) {
         my $tecla = $e->key_sym;
