@@ -6,6 +6,7 @@ use SDL::Video;
 use SDLx::Surface;
 use SDL::TTF;
 use Games::Zumbis;
+use Games::Zumbis::L10N;
 use utf8;
 
 has tempo => (is => 'ro', required => 1);
@@ -13,19 +14,24 @@ has ultimo_frame => (is => 'ro', required => 1);
 has texto => (is => 'ro', required => 1);
 has texto_sc => (is => 'ro', required => 1);
 
+my $lh = Games::Zumbis::L10N->get_handle() or die "unable to indentify language";
+
 my $image = SDLx::Surface->new(surface => SDL::Image::load( Games::Zumbis->sharedir->file('dados/gameover.png') ));
 
 SDL::TTF::init();
 my $font = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 30) or
-  die 'Erro carregando a fonte';
+  die $lh->maketext('Erro carregando a fonte');
+
 my $font_p = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 16) or
-  die 'Erro carregando a fonte';
+  die $lh->maketext('Erro carregando a fonte');
+
 my $color = SDL::Color->new(0,0,0);
 
 my $selectchar =
   SDL::TTF::render_text_blended
-  ($font_p, "Aperte 1 para Heroi, 2 para Heroina ou enter para continuar!", $color)
+  ($font_p, $lh->maketext('Aperte 1 para Heroi, 2 para Heroina ou enter para continuar!'), $color)
   or die 'TTF render error: ' . SDL::get_error();
+
 my $selectchar_w = $selectchar->w;
 my $selectchar_h = $selectchar->h;
 my $selectchar_srcrect = SDL::Rect->new(0,0,$selectchar_w,$selectchar_h);
@@ -42,10 +48,17 @@ sub BUILDARGS {
     my $rect2 =  SDL::Rect->new(0,0,$surface->w,$surface->h);
     $surface->blit($ultimo_frame, $rect1, $rect2);
 
-    my $texto = SDL::TTF::render_text_blended($font, "Voce sobreviveu por ".$args{tempo}." segundos!", $color)
-      or die 'TTF render error: ' . SDL::get_error();
-    my $texto_sc = SDL::TTF::render_text_blended($font, "E matou ".$args{score}." zumbi".($args{score}!=1?"s":'')."!", $color)
-      or die 'TTF render error: ' . SDL::get_error();
+    my $texto = SDL::TTF::render_text_blended(
+           $font,
+           $lh->maketext('Voce sobreviveu por [_1] segundos!', $args{tempo}),
+           $color
+    ) or die 'TTF render error: ' . SDL::get_error();
+
+    my $texto_sc = SDL::TTF::render_text_blended(
+            $font,
+            $lh->maketext('E matou [quant, _1, zumbi]!', $args{score}),
+            $color
+    ) or die 'TTF render error: ' . SDL::get_error();
 
     $args{ultimo_frame} = $ultimo_frame;
     $args{texto} = $texto;

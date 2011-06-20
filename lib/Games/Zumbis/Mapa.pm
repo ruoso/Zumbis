@@ -1,6 +1,7 @@
 package Games::Zumbis::Mapa;
 use Mouse;
 use Games::Zumbis;
+use Games::Zumbis::L10N;
 use XML::Compile::Schema;
 use XML::Compile::Util qw(pack_type);
 use constant MAP_NS => 'http://perl.org.br/games/zumbis';
@@ -21,8 +22,15 @@ has dados => (is => 'ro', isa => 'HashRef' );
 has colisao => (is => 'ro', isa => 'ArrayRef');
 has tileset => (is => 'ro');
 
+my $lh = Games::Zumbis::L10N->get_handle() or die "unable to indentify language";
+
+# translation handles inside renderer was making things too slow
+my $texto_mortes = $lh->maketext('Mortes:');
+my $texto_segundos = $lh->maketext('segundos');
+
 my $font_p = SDL::TTF::open_font( Games::Zumbis->sharedir->file('dados/AtariSmall.ttf'), 16) or
-  die 'Erro carregando a fonte';
+  die $lh->maketext('Erro carregando a fonte');
+
 my $color = SDL::Color->new(0,0,0);
 
 sub BUILDARGS {
@@ -114,7 +122,7 @@ sub render {
 
     my $timer =
       SDL::TTF::render_text_blended
-          ($font_p, "Mortes: $score. $tempo segundos", $color)
+          ($font_p, "$texto_mortes $score. $tempo $texto_segundos", $color)
             or die 'TTF render error: ' . SDL::get_error();
     my $timer_w = $timer->w;
     my $timer_h = $timer->h;
