@@ -12,7 +12,7 @@ sub sharedir {
     return $sharedir if $sharedir;
 
     my $root = Path::Class::Dir->new($FindBin::Bin,'..');
-warn "procurando $root";
+
     # desenvolvimento
     if ( -f $root->file('dist.ini') ) {
         $sharedir = $root->subdir('share');
