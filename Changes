@@ -2,6 +2,7 @@ Revision history for Games-Zumbis.
 
 {{$NEXT}}
 
+ - L10N support. Messages now in en-us and pt-br (garu)
  - new windows icon (froggs)
  - player can quit during the gameover scren (garu)
  - minor internal refactoring (garu)
