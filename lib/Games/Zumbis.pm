@@ -82,6 +82,7 @@ that lists each source and specific license.
   Author: Daniel Ruoso <daniel@ruoso.com>
   Author: Gustavo Barbosa <gustavo.b.pires@gmail.com>
   Author: Kartik Thakore <thakore.kartik@gmail.com>
+  Author: Tobias Leich <email@froggs.de>
 
 =head1 CONTRIBUTIONS
 
