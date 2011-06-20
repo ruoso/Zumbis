@@ -2,6 +2,9 @@ Revision history for Games-Zumbis.
 
 {{$NEXT}}
 
+ - new windows icon (froggs)
+ - player can quit during the gameover scren (garu)
+ - minor internal refactoring (garu)
  - oops, forgot to bump SDL minimal version (garu)
 
 0.04      2010-10-09 03:04:05 America/Sao_Paulo
