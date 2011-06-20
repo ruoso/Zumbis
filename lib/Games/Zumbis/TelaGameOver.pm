@@ -56,7 +56,7 @@ sub BUILDARGS {
 
     my $texto_sc = SDL::TTF::render_text_blended(
             $font,
-            $lh->maketext('E matou [quant, _1, zumbi]!', $args{score}),
+            $lh->maketext('E matou [quant,_1,zumbi]!', $args{score}),
             $color
     ) or die 'TTF render error: ' . SDL::get_error();
 
