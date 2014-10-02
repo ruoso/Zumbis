@@ -26,8 +26,8 @@ use Pod::Usage;
 
 my $help       = 0;
 my $fullscreen = 0;
-GetOptions( 'fullscreen|fs=s' => \$fullscreen,
-            'help|?'          => \$help,
+GetOptions( 'fullscreen|fs' => \$fullscreen,
+            'help|?'        => \$help,
           ) or pod2usage(1);
 pod2usage(2) if $help;
 
